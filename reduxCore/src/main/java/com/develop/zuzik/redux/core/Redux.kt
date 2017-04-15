@@ -1,0 +1,26 @@
+package com.develop.zuzik.redux.core
+
+import io.reactivex.Observable
+
+/**
+ * User: zuzik
+ * Date: 4/15/17
+ */
+interface Redux {
+
+	interface Model<State> {
+
+		val state: Observable<State>
+		val error: Observable<Throwable>
+
+		fun init()
+		fun release()
+	}
+
+	interface View
+
+	interface Presenter<in V : View> {
+		fun onStart(view: V)
+		fun onStop()
+	}
+}
