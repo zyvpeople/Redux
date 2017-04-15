@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 25
@@ -29,6 +30,10 @@ dependencies {
     compile project(':reduxModel')
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0'
+    compile 'com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:2.0.0'
+    compile 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:2.0.0'
+    compile 'com.jakewharton.rxbinding2:rxbinding-design-kotlin:2.0.0'
 }
 repositories {
     mavenCentral()
