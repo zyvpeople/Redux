@@ -23,8 +23,7 @@ class ReadOnlyDataModel<Data>(
 		addAction(
 				Observable
 						.merge(refreshFirstTime, refresh)
-						.switchMap { refreshData() }
-		)
+						.switchMap { refreshData() })
 		addReducer(ReadOnlyDataReducer())
 	}
 
@@ -32,6 +31,6 @@ class ReadOnlyDataModel<Data>(
 			dataQuery
 					.query()
 					.map<Action> { ReadOnlyDataAction.Load(it) }
-					.startWith(ReadOnlyDataAction.BeginLoad<Data>())
+					.startWith(ReadOnlyDataAction.BeginLoading<Data>())
 					.onErrorReturn { ReadOnlyDataAction.HandleError<Data>(it) }
 }

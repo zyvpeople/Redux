@@ -8,7 +8,7 @@ import com.develop.zuzik.redux.core.ErrorAction
  * Date: 4/15/17
  */
 internal sealed class ReadOnlyDataAction<Data> : Action {
-	class BeginLoad<Data> : ReadOnlyDataAction<Data>()
+	class BeginLoading<Data> : ReadOnlyDataAction<Data>()
 	class Load<Data>(val data: Data) : ReadOnlyDataAction<Data>()
 	class HandleError<Data>(override val error: Throwable) : ReadOnlyDataAction<Data>(), ErrorAction
 }

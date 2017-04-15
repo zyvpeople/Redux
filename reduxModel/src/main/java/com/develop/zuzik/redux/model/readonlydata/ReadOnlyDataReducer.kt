@@ -16,7 +16,7 @@ internal class ReadOnlyDataReducer<Data> : Reducer<ReadOnlyDataState<Data>> {
 
 	private fun reduce(oldState: ReadOnlyDataState<Data>, action: ReadOnlyDataAction<Data>): ReadOnlyDataState<Data> =
 			when (action) {
-				is ReadOnlyDataAction.BeginLoad ->
+				is ReadOnlyDataAction.BeginLoading ->
 					oldState.copy(
 							loading = true)
 				is ReadOnlyDataAction.Load ->

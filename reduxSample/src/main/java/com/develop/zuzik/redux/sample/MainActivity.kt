@@ -3,6 +3,7 @@ package com.develop.zuzik.redux.sample
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.develop.zuzik.redux.R
+import com.develop.zuzik.redux.sample.editabledata.EditableDataActivity
 import com.develop.zuzik.redux.sample.extension.startActivity
 import com.develop.zuzik.redux.sample.readonlydata.ReadOnlyDataActivity
 import com.jakewharton.rxbinding2.view.clicks
@@ -20,6 +21,9 @@ class MainActivity : AppCompatActivity() {
 		intent(btnReadOnlyData
 				.clicks()
 				.subscribe(startActivity(ReadOnlyDataActivity::class.java)))
+		intent(btnEditableData
+				.clicks()
+				.subscribe(startActivity(EditableDataActivity::class.java)))
 	}
 
 	override fun onDestroy() {

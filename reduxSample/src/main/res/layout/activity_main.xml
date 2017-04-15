@@ -16,4 +16,10 @@
 		android:layout_height="64dp"
 		android:text="Read only data"/>
 
+	<android.support.v7.widget.AppCompatButton
+		android:id="@+id/btnEditableData"
+		android:layout_width="match_parent"
+		android:layout_height="64dp"
+		android:text="Editable data"/>
+
 </LinearLayout>
