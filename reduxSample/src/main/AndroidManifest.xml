@@ -19,6 +19,8 @@
 		</activity>
 		<activity android:name=".sample.editabledata.EditableDataActivity">
 		</activity>
+		<activity android:name=".sample.entities.EntitiesActivity">
+		</activity>
 	</application>
 
 </manifest>

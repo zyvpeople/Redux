@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<android.support.v7.widget.AppCompatEditText
+		android:id="@+id/etFilter"
+		android:layout_width="match_parent"
+		android:layout_height="56dp"
+		android:hint="Filter"/>
+
+	<android.support.v7.widget.AppCompatTextView
+		android:id="@+id/tvError"
+		android:layout_width="match_parent"
+		android:layout_height="56dp"
+		android:background="@android:color/holo_red_light"
+		android:gravity="center"
+		tools:text="Error"/>
+
+	<android.support.v4.widget.SwipeRefreshLayout
+		android:id="@+id/swipeRefreshLayout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<android.support.v7.widget.RecyclerView
+			android:id="@+id/recyclerView"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"/>
+
+	</android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>
