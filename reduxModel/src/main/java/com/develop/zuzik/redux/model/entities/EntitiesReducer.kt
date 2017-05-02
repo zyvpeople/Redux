@@ -28,6 +28,7 @@ internal class EntitiesReducer<Entity, Filter> : Reducer<EntitiesState<Entity, F
 				is EntitiesAction.HandleError ->
 					oldState.copy(
 							loading = false,
-							error = action.error)
+							error = action.error,
+							entities = listOf())
 			}
 }

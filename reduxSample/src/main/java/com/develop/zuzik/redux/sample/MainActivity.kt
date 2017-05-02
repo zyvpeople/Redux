@@ -6,6 +6,8 @@ import com.develop.zuzik.redux.R
 import com.develop.zuzik.redux.sample.editabledata.EditableDataActivity
 import com.develop.zuzik.redux.sample.entities.EntitiesActivity
 import com.develop.zuzik.redux.sample.extension.startActivity
+import com.develop.zuzik.redux.sample.permissions.ContactsActivity
+import com.develop.zuzik.redux.sample.permissions.CounterActivity
 import com.develop.zuzik.redux.sample.readonlydata.ReadOnlyDataActivity
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.disposables.CompositeDisposable
@@ -28,6 +30,12 @@ class MainActivity : AppCompatActivity() {
 		intent(btnEntities
 				.clicks()
 				.subscribe(startActivity(EntitiesActivity::class.java)))
+		intent(btnCounter
+				.clicks()
+				.subscribe(startActivity(CounterActivity::class.java)))
+		intent(btnContacts
+				.clicks()
+				.subscribe(startActivity(ContactsActivity::class.java)))
 	}
 
 	override fun onDestroy() {
