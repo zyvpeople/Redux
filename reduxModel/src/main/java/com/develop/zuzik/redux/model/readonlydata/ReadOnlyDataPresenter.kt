@@ -14,12 +14,10 @@ class ReadOnlyDataPresenter<Data>(private val model: ReadOnlyData.Model<Data>) :
 
 	override fun onStart(view: ReadOnlyData.View<Data>) {
 		intent(model
-				.state
-				.map { it.loading }
+				.property { it.loading }
 				.subscribe(view.displayProgress.asConsumer()))
 		intent(model
-				.state
-				.map { it.data }
+				.versionProperty { it.data }
 				.subscribe(view.displayData.asConsumer()))
 		intent(model
 				.state

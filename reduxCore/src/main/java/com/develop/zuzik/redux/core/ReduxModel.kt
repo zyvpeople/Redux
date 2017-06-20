@@ -52,7 +52,7 @@ abstract class ReduxModel<State>(private val defaultState: State) : Redux.Model<
 			state
 					.map(versionPropertySelector)
 					.distinct { it.version }
-					.map { it.property }
+					.map { it.data }
 
 	protected fun addAction(action: Observable<Action>) {
 		actions += action
