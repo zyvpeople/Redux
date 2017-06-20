@@ -2,6 +2,7 @@ package com.develop.zuzik.redux.model.editabledata
 
 import com.develop.zuzik.redux.core.Action
 import com.develop.zuzik.redux.core.ReduxModel
+import com.develop.zuzik.redux.core.Version
 import com.develop.zuzik.redux.core.extension.UnitInstance
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -13,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 class EditableDataModel<Data>(defaultData: Data,
 							  private val dataQuery: DataQuery<Data>,
 							  private val updateDataCommand: UpdateDataCommand<Data>) :
-		ReduxModel<EditableDataState<Data>>(EditableDataState(originalData = defaultData, editedData = defaultData, loading = false, editing = false, error = null)),
+		ReduxModel<EditableDataState<Data>>(EditableDataState(originalData = defaultData, editedData = Version(data = defaultData), loading = false, editing = false, error = null)),
 		EditableData.Model<Data> {
 
 	override val refresh: PublishSubject<Unit> = PublishSubject.create()
@@ -46,7 +47,7 @@ class EditableDataModel<Data>(defaultData: Data,
 	private fun saveData(): Observable<Action> =
 			state
 					.take(1)
-					.map { it.editedData }
+					.map { it.editedData.data }
 					.flatMap { updateDataCommand.update(it).toObservable() }
 					.map<Action> { EditableDataAction.Save(it) }
 					.startWith(EditableDataAction.BeginSaving<Data>())
