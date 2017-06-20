@@ -43,6 +43,17 @@ abstract class ReduxModel<State>(private val defaultState: State) : Redux.Model<
 		disposable?.dispose()
 	}
 
+	override fun <Property> property(propertySelector: (State) -> Property): Observable<Property> =
+			state
+					.map(propertySelector)
+					.distinctUntilChanged()
+
+	override fun <Property> versionProperty(versionPropertySelector: (State) -> Version<Property>): Observable<Property> =
+			state
+					.map(versionPropertySelector)
+					.distinct { it.version }
+					.map { it.property }
+
 	protected fun addAction(action: Observable<Action>) {
 		actions += action
 	}
