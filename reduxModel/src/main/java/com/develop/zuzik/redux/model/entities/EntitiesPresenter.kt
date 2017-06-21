@@ -18,8 +18,7 @@ class EntitiesPresenter<Entity, Filter>(private val model: Entities.Model<Entity
 				.map { it.loading }
 				.subscribe(view.displayProgress.asConsumer()))
 		intent(model
-				.state
-				.map { it.entities }
+				.versionProperty { it.entities }
 				.subscribe(view.displayEntities.asConsumer()))
 		intent(model
 				.state
