@@ -23,12 +23,12 @@ internal class EntitiesReducer<Entity, Filter> : Reducer<EntitiesState<Entity, F
 					oldState.copy(
 							loading = false,
 							error = null,
-							entities = action.entities,
-							filter = action.filter)
+							entities = oldState.entities.newVersion(action.entities),
+							filter = oldState.filter.newVersion(action.filter))
 				is EntitiesAction.HandleError ->
 					oldState.copy(
 							loading = false,
 							error = action.error,
-							entities = listOf())
+							entities = oldState.entities.newVersion(listOf()))
 			}
 }

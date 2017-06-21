@@ -14,32 +14,25 @@ class EditableDataPresenter<Data>(private val model: EditableData.Model<Data>) :
 
 	override fun onStart(view: EditableData.View<Data>) {
 		intent(model
-				.state
-				.map { it.loading }
+				.property { it.loading }
 				.subscribe(view.displayProgress.asConsumer()))
 		intent(model
-				.state
-				.map { it.editedData }
+				.versionProperty { it.editedData }
 				.subscribe(view.displayData.asConsumer()))
 		intent(model
-				.state
-				.map { it.editing }
+				.property { it.editing }
 				.subscribe(view.setDataEditable.asConsumer()))
 		intent(model
-				.state
-				.map { !it.editing }
+				.property { !it.editing }
 				.subscribe(view.allowRefresh.asConsumer()))
 		intent(model
-				.state
-				.map { !it.editing }
+				.property { !it.editing }
 				.subscribe(view.allowEdit.asConsumer()))
 		intent(model
-				.state
-				.map { it.editing }
+				.property { it.editing }
 				.subscribe(view.allowCancelEdit.asConsumer()))
 		intent(model
-				.state
-				.map { it.editing }
+				.property { it.editing }
 				.subscribe(view.allowSave.asConsumer()))
 
 		intent(model

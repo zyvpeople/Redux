@@ -2,6 +2,7 @@ package com.develop.zuzik.redux.model.entities
 
 import com.develop.zuzik.redux.core.Action
 import com.develop.zuzik.redux.core.ReduxModel
+import com.develop.zuzik.redux.core.Version
 import com.develop.zuzik.redux.core.extension.UnitInstance
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -14,7 +15,7 @@ import io.reactivex.subjects.PublishSubject
  */
 class EntitiesModel<Entity, Filter>(defaultFilter: Filter,
 									private val entitiesQuery: EntitiesQuery<Entity, Filter>) :
-		ReduxModel<EntitiesState<Entity, Filter>>(EntitiesState(listOf(), defaultFilter, false, null)),
+		ReduxModel<EntitiesState<Entity, Filter>>(EntitiesState(Version(data = listOf()), Version(data = defaultFilter), false, null)),
 		Entities.Model<Entity, Filter> {
 
 	override val refresh: PublishSubject<Unit> = PublishSubject.create()

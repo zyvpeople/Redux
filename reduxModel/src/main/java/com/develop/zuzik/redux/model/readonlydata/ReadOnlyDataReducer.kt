@@ -22,7 +22,7 @@ internal class ReadOnlyDataReducer<Data> : Reducer<ReadOnlyDataState<Data>> {
 				is ReadOnlyDataAction.Load ->
 					oldState.copy(
 							loading = false,
-							data = action.data,
+							data = oldState.data.newVersion(action.data),
 							error = null)
 				is ReadOnlyDataAction.HandleError ->
 					oldState.copy(

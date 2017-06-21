@@ -2,6 +2,7 @@ package com.develop.zuzik.redux.model.readonlydata
 
 import com.develop.zuzik.redux.core.Action
 import com.develop.zuzik.redux.core.ReduxModel
+import com.develop.zuzik.redux.core.Version
 import com.develop.zuzik.redux.core.extension.UnitInstance
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -13,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 class ReadOnlyDataModel<Data>(
 		defaultData: Data,
 		private val dataQuery: DataQuery<Data>) :
-		ReduxModel<ReadOnlyDataState<Data>>(ReadOnlyDataState(data = defaultData, loading = false, error = null)),
+		ReduxModel<ReadOnlyDataState<Data>>(ReadOnlyDataState(data = Version(data = defaultData), loading = false, error = null)),
 		ReadOnlyData.Model<Data> {
 
 	override val refresh: PublishSubject<Unit> = PublishSubject.create<Unit>()

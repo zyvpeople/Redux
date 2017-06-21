@@ -15,6 +15,9 @@ interface Redux {
 
 		fun init()
 		fun release()
+
+		fun <Property> property(propertySelector: (State) -> Property): Observable<Property>
+		fun <Property> versionProperty(versionPropertySelector: (State) -> Version<Property>): Observable<Property>
 	}
 
 	interface View

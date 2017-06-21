@@ -24,7 +24,7 @@ internal class ReadOnlyLoadingModeEditableDataReducer<Data> : Reducer<EditableDa
 							loading = false,
 							error = null,
 							originalData = action.data,
-							editedData = action.data)
+							editedData = oldState.editedData.newVersion(action.data))
 				is EditableDataAction.Edit ->
 					oldState
 				is EditableDataAction.CancelEdit ->

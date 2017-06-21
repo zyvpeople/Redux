@@ -28,10 +28,10 @@ internal class EditWaitingModeEditableDataReducer<Data> : Reducer<EditableDataSt
 					oldState.copy(
 							editing = false,
 							error = null,
-							editedData = oldState.originalData)
+							editedData = oldState.editedData.newVersion(oldState.originalData))
 				is EditableDataAction.ModifyEditedData ->
 					oldState.copy(
-							editedData = action.editedData)
+							editedData = oldState.editedData.newVersion(action.editedData))
 				is EditableDataAction.BeginSaving ->
 					oldState.copy(
 							loading = true)
@@ -41,7 +41,7 @@ internal class EditWaitingModeEditableDataReducer<Data> : Reducer<EditableDataSt
 							error = null,
 							editing = false,
 							originalData = action.data,
-							editedData = action.data)
+							editedData = oldState.editedData.newVersion(action.data))
 				is EditableDataAction.HandleLoadingError ->
 					oldState
 				is EditableDataAction.HandleSavingError ->
