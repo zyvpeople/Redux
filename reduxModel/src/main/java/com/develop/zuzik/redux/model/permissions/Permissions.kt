@@ -12,8 +12,8 @@ import io.reactivex.Observer
 interface Permissions {
 	interface Model : Redux.Model<PermissionsState> {
 
+		val onRequestPermissions: Observer<PermissionRequest>
 		val onReceivePermissionResponse: Observer<PermissionResponse>
-		val permissionRequest: Observable<PermissionRequest>
 
 		fun <T> checkPermission(vararg permission: Permission): (Observable<T>) -> ObservableSource<T>
 	}

@@ -14,7 +14,22 @@ internal class PermissionsReducer : Reducer<PermissionsState> {
 
 	private fun reduce(oldState: PermissionsState, action: PermissionsAction): PermissionsState =
 			when (action) {
-				is PermissionsAction.RegisterOperation -> oldState.copy(operationIds = oldState.operationIds.plus(action.operationId))
-				is PermissionsAction.UnregisterOperation -> oldState.copy(operationIds = oldState.operationIds.minus(action.operationId))
+				is PermissionsAction.AddRequest ->
+					oldState.copy(requests = oldState.requests.plus(action.request.id to action.request))
+				is PermissionsAction.RemoveRequest ->
+					oldState.copy(requests = oldState.requests.minus(action.requestId))
+				is PermissionsAction.SetCurrentRequest ->
+					oldState.copy(currentRequest = action.request)
+				is PermissionsAction.ClearCurrentRequest ->
+					oldState.copy(
+							requests = oldState.requests.minus(action.requestId),
+							currentRequest = oldState
+									.currentRequest
+									?.let {
+										if (it.id == action.requestId)
+											null
+										else
+											it
+									})
 			}
 }

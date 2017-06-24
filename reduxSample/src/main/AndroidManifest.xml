@@ -28,7 +28,7 @@
 		</activity>
 		<activity android:name=".sample.permissions.CounterActivity">
 		</activity>
-		<activity android:name=".sample.permissions.ContactsActivity">
+		<activity android:name=".sample.permissions.PermissionsActivity">
 		</activity>
 	</application>
 
