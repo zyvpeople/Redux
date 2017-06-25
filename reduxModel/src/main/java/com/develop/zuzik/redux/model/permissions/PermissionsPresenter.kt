@@ -13,7 +13,11 @@ class PermissionsPresenter(private val model: Permissions.Model) :
 
 	override fun onStart(view: Permissions.View) {
 		intent(model
-				.permissionRequest
+				.state
+				.filter { it.currentRequest == null }
+				.filter { it.requests.isNotEmpty() }
+				.map { it.requests.entries.first().value }
+				.doOnNext { model.onRequestPermissions.onNext(it) }
 				.subscribe(view.requestPermissions.asConsumer()))
 
 		intent(view

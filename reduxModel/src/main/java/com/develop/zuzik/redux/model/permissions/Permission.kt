@@ -56,5 +56,5 @@ sealed class Permission {
 		class WriteExternalStorage : Storage()
 	}
 
-	class Custom(val permission: String) : Permission()
+	class Custom(val permission: String?) : Permission()
 }

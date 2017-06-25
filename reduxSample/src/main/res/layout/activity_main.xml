@@ -29,12 +29,6 @@
 		android:text="Entities"/>
 
 	<android.support.v7.widget.AppCompatButton
-		android:id="@+id/btnCounter"
-		android:layout_width="match_parent"
-		android:layout_height="64dp"
-		android:text="Counter (Permissions)"/>
-
-	<android.support.v7.widget.AppCompatButton
 		android:id="@+id/btnContacts"
 		android:layout_width="match_parent"
 		android:layout_height="64dp"

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.develop.zuzik.redux"
-		  xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+		  package="com.develop.zuzik.redux">
 
 	<uses-permission android:name="android.permission.WRITE_CALENDAR"/>
 	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 	<uses-permission android:name="android.permission.RECORD_AUDIO"/>
-	<uses-permission android:name="android.permission.READ_CONTACTS" />
+	<uses-permission android:name="android.permission.READ_CONTACTS"/>
+	<uses-permission android:name="android.permission.BODY_SENSORS"/>
 
 	<application
 		android:allowBackup="true"
@@ -28,7 +29,7 @@
 		</activity>
 		<activity android:name=".sample.permissions.CounterActivity">
 		</activity>
-		<activity android:name=".sample.permissions.ContactsActivity">
+		<activity android:name=".sample.permissions.PermissionsActivity">
 		</activity>
 	</application>
 

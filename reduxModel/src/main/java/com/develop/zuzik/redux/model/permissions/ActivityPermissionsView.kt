@@ -19,21 +19,23 @@ class ActivityPermissionsView(private val activity: Activity) : Permissions.View
 	override val requestPermissions = requestPermissions().asObserver()
 	override val onReceivePermissionsResponse: PublishSubject<PermissionResponse> = PublishSubject.create()
 
-	private fun requestPermissions(): Consumer<in PermissionRequest> = Consumer {
-		val permissions = it
+	private fun requestPermissions(): Consumer<in PermissionRequest> = Consumer { permissionRequest ->
+		permissionRequest
 				.permissions
 				.map(mapper::mapToString)
 				.filter { it != null }
 				.map { it!! }
 				.toTypedArray()
-		if (permissions.isNotEmpty()) {
-			ActivityCompat.requestPermissions(
-					activity,
-					permissions,
-					it.operationId)
-		} else {
-			Log.e(javaClass.simpleName, "Permissions count is zero")
-		}
+				.let {
+					if (it.isNotEmpty()) {
+						ActivityCompat.requestPermissions(
+								activity,
+								it,
+								permissionRequest.id)
+					} else {
+						Log.e(javaClass.simpleName, "Permissions count is zero")
+					}
+				}
 	}
 
 	fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -48,7 +50,7 @@ class ActivityPermissionsView(private val activity: Activity) : Permissions.View
 						}
 						.let {
 							PermissionResponse(
-									operationId = requestCode,
+									id = requestCode,
 									grantedPermissions = it)
 						})
 	}

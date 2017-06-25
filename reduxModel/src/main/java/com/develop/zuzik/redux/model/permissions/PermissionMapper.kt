@@ -1,6 +1,7 @@
 package com.develop.zuzik.redux.model.permissions
 
 import android.Manifest
+import android.os.Build
 
 /**
  * User: zuzik
@@ -8,8 +9,7 @@ import android.Manifest
  */
 class PermissionMapper {
 
-	//TODO: api level is different
-	private val permissions = mapOf(
+	private val permissions = mutableMapOf(
 			Manifest.permission.READ_CALENDAR to Permission.Calendar.ReadCalendar(),
 			Manifest.permission.WRITE_CALENDAR to Permission.Calendar.WriteCalendar(),
 			Manifest.permission.CAMERA to Permission.Camera.Camera(),
@@ -21,19 +21,26 @@ class PermissionMapper {
 			Manifest.permission.RECORD_AUDIO to Permission.Microphone.RecordAudio(),
 			Manifest.permission.READ_PHONE_STATE to Permission.Phone.ReadPhoneState(),
 			Manifest.permission.CALL_PHONE to Permission.Phone.CallPhone(),
-			Manifest.permission.READ_CALL_LOG to Permission.Phone.ReadCallLog(),
-			Manifest.permission.WRITE_CALL_LOG to Permission.Phone.WriteCallLog(),
 			Manifest.permission.ADD_VOICEMAIL to Permission.Phone.AddVoiceMail(),
 			Manifest.permission.USE_SIP to Permission.Phone.UseSIP(),
 			Manifest.permission.PROCESS_OUTGOING_CALLS to Permission.Phone.ProcessOutgoingCalls(),
-			Manifest.permission.BODY_SENSORS to Permission.Sensors.BodySensors(),
 			Manifest.permission.SEND_SMS to Permission.SMS.SendSMS(),
 			Manifest.permission.RECEIVE_SMS to Permission.SMS.ReceiveSMS(),
 			Manifest.permission.READ_SMS to Permission.SMS.ReadSMS(),
 			Manifest.permission.RECEIVE_WAP_PUSH to Permission.SMS.ReceiveWAPPush(),
 			Manifest.permission.RECEIVE_MMS to Permission.SMS.ReceiveMMS(),
-			Manifest.permission.READ_EXTERNAL_STORAGE to Permission.Storage.ReadExternalStorage(),
 			Manifest.permission.WRITE_EXTERNAL_STORAGE to Permission.Storage.WriteExternalStorage())
+			.apply {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+					put(Manifest.permission.READ_CALL_LOG, Permission.Phone.ReadCallLog())
+					put(Manifest.permission.WRITE_CALL_LOG, Permission.Phone.WriteCallLog())
+					put(Manifest.permission.READ_EXTERNAL_STORAGE, Permission.Storage.ReadExternalStorage())
+				}
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+					put(Manifest.permission.BODY_SENSORS, Permission.Sensors.BodySensors())
+				}
+			}
+			.toMap()
 
 	fun mapToString(permission: Permission): String? =
 			when (permission) {

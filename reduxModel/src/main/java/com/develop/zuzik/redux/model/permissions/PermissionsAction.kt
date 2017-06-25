@@ -7,6 +7,8 @@ import com.develop.zuzik.redux.core.Action
  * Date: 5/1/17
  */
 internal sealed class PermissionsAction : Action {
-	class RegisterOperation(val operationId: Int) : PermissionsAction()
-	class UnregisterOperation(val operationId: Int) : PermissionsAction()
+	class AddRequest(val request: PermissionRequest) : PermissionsAction()
+	class RemoveRequest(val requestId: Int) : PermissionsAction()
+	class SetCurrentRequest(val request: PermissionRequest) : PermissionsAction()
+	class ClearCurrentRequest(val requestId: Int) : PermissionsAction()
 }

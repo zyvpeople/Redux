@@ -16,28 +16,35 @@ import io.reactivex.subjects.PublishSubject
  * Date: 4/30/17
  */
 class PermissionsModel(private val context: Context) :
-		ReduxModel<PermissionsState>(PermissionsState(emptySet())),
+		ReduxModel<PermissionsState>(PermissionsState(requests = emptyMap(), currentRequest = null)),
 		Permissions.Model {
 
 	private val action = PublishSubject.create<Action>()
 	private val mapper = PermissionMapper()
+	private val requestIdProvider = PermissionRequestIdProvider()
 
+	override val onRequestPermissions: PublishSubject<PermissionRequest> = PublishSubject.create()
 	override val onReceivePermissionResponse: PublishSubject<PermissionResponse> = PublishSubject.create()
-	override val permissionRequest: PublishSubject<PermissionRequest> = PublishSubject.create()
 
 	init {
+		addAction(onRequestPermissions
+				.doOnNext { action.onNext(PermissionsAction.SetCurrentRequest(it)) }
+				.flatMap<Action> { Observable.never() })
+		addAction(onReceivePermissionResponse()
+				.doOnNext { action.onNext(PermissionsAction.ClearCurrentRequest(it.id)) }
+				.flatMap<Action> { Observable.never() })
 		addAction(action)
 		addReducer(PermissionsReducer())
 	}
 
 	override fun <T> checkPermission(vararg permission: Permission): (Observable<T>) -> ObservableSource<T> = { original ->
-		operationId { operationId ->
+		requestId { requestId ->
 			val permissions = Observable.just(permission.asList())
-			val grantedPermissionResponse = onReceivePermissionResponse
+			val grantedPermissionResponse = onReceivePermissionResponse()
 					.startWith(PermissionResponse(
-							operationId = operationId,
+							id = requestId,
 							grantedPermissions = permission.map { GrantedPermission(it, true) }))
-					.filter { it.operationId == operationId }
+					.filter { it.id == requestId }
 					.flatMap {
 						if (it.grantedPermissions.find { !it.granted } == null) {
 							Observable.just(it)
@@ -58,10 +65,9 @@ class PermissionsModel(private val context: Context) :
 					}
 					.doOnNext {
 						if (it.isNotEmpty()) {
-							permissionRequest.onNext(PermissionRequest(
-									operationId = operationId,
-									permissions = it.map(GrantedPermission::permission)
-							))
+							action.onNext(PermissionsAction.AddRequest(PermissionRequest(
+									id = requestId,
+									permissions = it.map(GrantedPermission::permission))))
 						}
 					}
 					.filter { it.isEmpty() }
@@ -70,27 +76,17 @@ class PermissionsModel(private val context: Context) :
 				.subscribeOn(AndroidSchedulers.mainThread())
 	}
 
-	private fun <T> operationId(operationIdSupplier: (Int) -> Observable<T>): Observable<T> =
+	private fun <T> requestId(requestIdSupplier: (Int) -> Observable<T>): Observable<T> =
 			Observable
 					.defer {
-						state
-								.take(1)
+						Observable.just(requestIdProvider.provide())
 					}
-					.map {
-						val currentMaxId = it.operationIds.max()
-						val hypotheticalCurrentIdsRange = (0..(currentMaxId ?: 0))
-						val realCurrentIdsRange = it.operationIds
-						val unusedIds = hypotheticalCurrentIdsRange.minus(realCurrentIdsRange)
-						val newOperationId = unusedIds.firstOrNull() ?: (currentMaxId?.let { it + 1 } ?: 0)
-						newOperationId
-					}
-					.doOnNext { action.onNext(PermissionsAction.RegisterOperation(it)) }
-					.flatMap { operationId ->
+					.flatMap { requestId ->
 						Observable
 								.using(
-										{ operationId },
-										{ operationIdSupplier(it) },
-										{ action.onNext(PermissionsAction.UnregisterOperation(operationId)) })
+										{ requestId },
+										{ requestIdSupplier(it) },
+										{ action.onNext(PermissionsAction.RemoveRequest(requestId)) })
 					}
 
 	private fun toGrantedPermission(permission: Permission): GrantedPermission =
@@ -99,5 +95,9 @@ class PermissionsModel(private val context: Context) :
 					granted = mapper
 							.mapToString(permission)
 							?.let { ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
-							?: false)
+							?: true)
+
+	private fun onReceivePermissionResponse(): Observable<PermissionResponse> =
+			onReceivePermissionResponse
+					.filter { it.grantedPermissions.isNotEmpty() }
 }
