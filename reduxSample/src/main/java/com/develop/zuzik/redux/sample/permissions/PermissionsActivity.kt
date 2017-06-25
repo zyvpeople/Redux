@@ -35,7 +35,7 @@ class PermissionsActivity : AppCompatActivity() {
 	companion object Models {
 		var permissionsModel: Permissions.Model? = null
 		var entitiesModelContacts: Entities.Model<String, Unit>? = null
-		var entitiesModelCalendar: Entities.Model<String, Unit>? = null
+		var entitiesModelSensors: Entities.Model<String, Unit>? = null
 		var entitiesModelMicrophone: Entities.Model<String, Unit>? = null
 
 		fun init(context: Context) {
@@ -47,12 +47,12 @@ class PermissionsActivity : AppCompatActivity() {
 
 			permissionsModel = PermissionsModel(applicationContext)
 			entitiesModelContacts = EntitiesModel(UnitInstance.INSTANCE, EntitiesWithPermissionQuery(permissionsModel!!, "contacts", Permission.Contacts.ReadContacts()))
-			entitiesModelCalendar = EntitiesModel(UnitInstance.INSTANCE, EntitiesWithPermissionQuery(permissionsModel!!, "calendar", Permission.Calendar.WriteCalendar()))
+			entitiesModelSensors = EntitiesModel(UnitInstance.INSTANCE, EntitiesWithPermissionQuery(permissionsModel!!, "sensors", Permission.Sensors.BodySensors()))
 			entitiesModelMicrophone = EntitiesModel(UnitInstance.INSTANCE, EntitiesWithPermissionQuery(permissionsModel!!, "microphone", Permission.Microphone.RecordAudio()))
 
 			permissionsModel!!.init()
 			entitiesModelContacts!!.init()
-			entitiesModelCalendar!!.init()
+			entitiesModelSensors!!.init()
 		}
 	}
 
@@ -60,7 +60,7 @@ class PermissionsActivity : AppCompatActivity() {
 	private lateinit var permissionsView: ActivityPermissionsView
 
 	private lateinit var entitiesPresenterContacts: Entities.Presenter<String, Unit>
-	private lateinit var entitiesPresenterCalendar: Entities.Presenter<String, Unit>
+	private lateinit var entitiesPresenterSensors: Entities.Presenter<String, Unit>
 	private lateinit var entitiesPresenterMicrophone: Entities.Presenter<String, Unit>
 
 	private val compositeDisposable = CompositeDisposable()
@@ -76,7 +76,7 @@ class PermissionsActivity : AppCompatActivity() {
 
 
 		entitiesPresenterContacts = EntitiesPresenter(entitiesModelContacts!!)
-		entitiesPresenterCalendar = EntitiesPresenter(entitiesModelCalendar!!)
+		entitiesPresenterSensors = EntitiesPresenter(entitiesModelSensors!!)
 		entitiesPresenterMicrophone = EntitiesPresenter(entitiesModelMicrophone!!)
 
 		entitiesModelMicrophone!!.init()
@@ -121,14 +121,14 @@ class PermissionsActivity : AppCompatActivity() {
 		}
 
 		entitiesPresenterContacts.onStart(view)
-		entitiesPresenterCalendar.onStart(view)
+		entitiesPresenterSensors.onStart(view)
 		entitiesPresenterMicrophone.onStart(view)
 	}
 
 	override fun onStop() {
 		permissionsPresenter.onStop()
 		entitiesPresenterContacts.onStop()
-		entitiesPresenterCalendar.onStop()
+		entitiesPresenterSensors.onStop()
 		entitiesPresenterMicrophone.onStop()
 		super.onStop()
 	}

@@ -33,7 +33,6 @@ class ActivityPermissionsView(private val activity: Activity) : Permissions.View
 								it,
 								permissionRequest.id)
 					} else {
-						//TODO: maybe call onReceivePermissionsResponse
 						Log.e(javaClass.simpleName, "Permissions count is zero")
 					}
 				}

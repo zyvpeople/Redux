@@ -20,7 +20,8 @@ class EntitiesWithPermissionQuery(
 	override fun query(filter: Unit): Observable<List<String>> =
 			Observable
 					.just(listOf(Random().nextInt().toString()))
+					.doOnNext { Log.d(tag, Thread.currentThread().name) }
 					.doOnNext { Log.d(tag, it.toString()) }
-					.compose(permissionsModel.checkPermission(permission))
 					.subscribeOn(Schedulers.io())
+					.compose(permissionsModel.checkPermission(permission))
 }

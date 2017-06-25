@@ -95,7 +95,7 @@ class PermissionsModel(private val context: Context) :
 					granted = mapper
 							.mapToString(permission)
 							?.let { ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
-							?: false)
+							?: true)
 
 	private fun onReceivePermissionResponse(): Observable<PermissionResponse> =
 			onReceivePermissionResponse
