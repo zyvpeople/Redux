@@ -56,7 +56,6 @@ class PermissionsActivity : AppCompatActivity() {
 		}
 	}
 
-	private lateinit var permissionsPresenter: Permissions.Presenter
 	private lateinit var permissionsView: ActivityPermissionsView
 
 	private lateinit var entitiesPresenterContacts: Entities.Presenter<String, Unit>
@@ -71,9 +70,7 @@ class PermissionsActivity : AppCompatActivity() {
 
 		init(this)
 
-		permissionsPresenter = PermissionsPresenter(permissionsModel!!)
-		permissionsView = ActivityPermissionsView(this)
-
+		permissionsView = ActivityPermissionsView(this, permissionsModel!!)
 
 		entitiesPresenterContacts = EntitiesPresenter(entitiesModelContacts!!)
 		entitiesPresenterSensors = EntitiesPresenter(entitiesModelSensors!!)
@@ -96,7 +93,7 @@ class PermissionsActivity : AppCompatActivity() {
 	override fun onStart() {
 		super.onStart()
 
-		permissionsPresenter.onStart(permissionsView)
+		permissionsView.onStart()
 
 		val adapter = EntitiesAdapter()
 		recyclerView.layoutManager = LinearLayoutManager(this)
@@ -126,7 +123,7 @@ class PermissionsActivity : AppCompatActivity() {
 	}
 
 	override fun onStop() {
-		permissionsPresenter.onStop()
+		permissionsView.onStop()
 		entitiesPresenterContacts.onStop()
 		entitiesPresenterSensors.onStop()
 		entitiesPresenterMicrophone.onStop()

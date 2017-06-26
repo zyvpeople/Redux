@@ -12,9 +12,11 @@ import io.reactivex.subjects.PublishSubject
  * User: zuzik
  * Date: 5/1/17
  */
-class ActivityPermissionsView(private val activity: Activity) : Permissions.View {
+class ActivityPermissionsView(private val activity: Activity,
+							  permissionsModel: Permissions.Model) : Permissions.View {
 
 	private val mapper = PermissionMapper()
+	private val permissionsPresenter = PermissionsPresenter(permissionsModel)
 
 	override val requestPermissions = requestPermissions().asObserver()
 	override val onReceivePermissionsResponse: PublishSubject<PermissionResponse> = PublishSubject.create()
@@ -53,5 +55,13 @@ class ActivityPermissionsView(private val activity: Activity) : Permissions.View
 									id = requestCode,
 									grantedPermissions = it)
 						})
+	}
+
+	fun onStart() {
+		permissionsPresenter.onStart(this)
+	}
+
+	fun onStop() {
+		permissionsPresenter.onStop()
 	}
 }
