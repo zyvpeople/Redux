@@ -13,9 +13,9 @@ import android.widget.TextView
 import com.develop.zuzik.redux.R
 import com.develop.zuzik.redux.core.extension.UnitInstance
 import com.develop.zuzik.redux.core.extension.asObserver
-import com.develop.zuzik.redux.model.entities.Entities
-import com.develop.zuzik.redux.model.entities.EntitiesModel
-import com.develop.zuzik.redux.model.entities.EntitiesPresenter
+import com.develop.zuzik.redux.model.readonlyentities.ReadOnlyEntities
+import com.develop.zuzik.redux.model.readonlyentities.ReadOnlyEntitiesModel
+import com.develop.zuzik.redux.model.readonlyentities.ReadOnlyEntitiesPresenter
 import com.develop.zuzik.redux.model.permissions.*
 import com.develop.zuzik.redux.sample.extension.showErrorToast
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
@@ -34,9 +34,9 @@ class PermissionsActivity : AppCompatActivity() {
 
 	companion object Models {
 		var permissionsModel: Permissions.Model? = null
-		var entitiesModelContacts: Entities.Model<String, Unit>? = null
-		var entitiesModelSensors: Entities.Model<String, Unit>? = null
-		var entitiesModelMicrophone: Entities.Model<String, Unit>? = null
+		var entitiesModelContacts: ReadOnlyEntities.Model<String, Unit>? = null
+		var entitiesModelSensors: ReadOnlyEntities.Model<String, Unit>? = null
+		var entitiesModelMicrophone: ReadOnlyEntities.Model<String, Unit>? = null
 
 		fun init(context: Context) {
 			if (permissionsModel != null) {
@@ -46,9 +46,9 @@ class PermissionsActivity : AppCompatActivity() {
 			val applicationContext = ContextWrapper(context).applicationContext
 
 			permissionsModel = PermissionsModel(applicationContext)
-			entitiesModelContacts = EntitiesModel(UnitInstance.INSTANCE, EntitiesWithPermissionQuery(permissionsModel!!, "contacts", Permission.Contacts.ReadContacts()))
-			entitiesModelSensors = EntitiesModel(UnitInstance.INSTANCE, EntitiesWithPermissionQuery(permissionsModel!!, "sensors", Permission.Sensors.BodySensors()))
-			entitiesModelMicrophone = EntitiesModel(UnitInstance.INSTANCE, EntitiesWithPermissionQuery(permissionsModel!!, "microphone", Permission.Microphone.RecordAudio()))
+			entitiesModelContacts = ReadOnlyEntitiesModel(UnitInstance.INSTANCE, EntitiesWithPermissionQuery(permissionsModel!!, "contacts", Permission.Contacts.ReadContacts()))
+			entitiesModelSensors = ReadOnlyEntitiesModel(UnitInstance.INSTANCE, EntitiesWithPermissionQuery(permissionsModel!!, "sensors", Permission.Sensors.BodySensors()))
+			entitiesModelMicrophone = ReadOnlyEntitiesModel(UnitInstance.INSTANCE, EntitiesWithPermissionQuery(permissionsModel!!, "microphone", Permission.Microphone.RecordAudio()))
 
 			permissionsModel!!.init()
 			entitiesModelContacts!!.init()
@@ -58,9 +58,9 @@ class PermissionsActivity : AppCompatActivity() {
 
 	private lateinit var permissionsView: ActivityPermissionsView
 
-	private lateinit var entitiesPresenterContacts: Entities.Presenter<String, Unit>
-	private lateinit var entitiesPresenterSensors: Entities.Presenter<String, Unit>
-	private lateinit var entitiesPresenterMicrophone: Entities.Presenter<String, Unit>
+	private lateinit var entitiesPresenterContacts: ReadOnlyEntities.Presenter<String, Unit>
+	private lateinit var entitiesPresenterSensors: ReadOnlyEntities.Presenter<String, Unit>
+	private lateinit var entitiesPresenterMicrophone: ReadOnlyEntities.Presenter<String, Unit>
 
 	private val compositeDisposable = CompositeDisposable()
 
@@ -72,9 +72,9 @@ class PermissionsActivity : AppCompatActivity() {
 
 		permissionsView = ActivityPermissionsView(this, permissionsModel!!)
 
-		entitiesPresenterContacts = EntitiesPresenter(entitiesModelContacts!!)
-		entitiesPresenterSensors = EntitiesPresenter(entitiesModelSensors!!)
-		entitiesPresenterMicrophone = EntitiesPresenter(entitiesModelMicrophone!!)
+		entitiesPresenterContacts = ReadOnlyEntitiesPresenter(entitiesModelContacts!!)
+		entitiesPresenterSensors = ReadOnlyEntitiesPresenter(entitiesModelSensors!!)
+		entitiesPresenterMicrophone = ReadOnlyEntitiesPresenter(entitiesModelMicrophone!!)
 
 		entitiesModelMicrophone!!.init()
 
@@ -107,7 +107,7 @@ class PermissionsActivity : AppCompatActivity() {
 		val refresh = PublishSubject.create<Unit>()
 		swipeRefreshLayout.refreshes().subscribe { refresh.onNext(it) }
 
-		val view = object : Entities.View<String, Unit> {
+		val view = object : ReadOnlyEntities.View<String, Unit> {
 			override val displayProgress: Observer<in Boolean> = swipeRefreshLayout.refreshing().asObserver()
 			override val displayEntities: Observer<in List<String>> = displayContacts.asObserver()
 			override val displayError: Observer<Throwable> = PublishSubject.create()

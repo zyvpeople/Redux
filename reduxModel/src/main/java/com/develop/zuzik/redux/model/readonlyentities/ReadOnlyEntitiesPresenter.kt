@@ -1,4 +1,4 @@
-package com.develop.zuzik.redux.model.entities
+package com.develop.zuzik.redux.model.readonlyentities
 
 import com.develop.zuzik.redux.core.ReduxPresenter
 import com.develop.zuzik.redux.core.extension.UnitInstance
@@ -8,11 +8,11 @@ import com.develop.zuzik.redux.core.extension.asConsumer
  * User: zuzik
  * Date: 4/16/17
  */
-class EntitiesPresenter<Entity, Filter>(private val model: Entities.Model<Entity, Filter>) :
-		ReduxPresenter<Entities.View<Entity, Filter>>(),
-		Entities.Presenter<Entity, Filter> {
+class ReadOnlyEntitiesPresenter<Entity, Filter>(private val model: ReadOnlyEntities.Model<Entity, Filter>) :
+		ReduxPresenter<ReadOnlyEntities.View<Entity, Filter>>(),
+		ReadOnlyEntities.Presenter<Entity, Filter> {
 
-	override fun onStart(view: Entities.View<Entity, Filter>) {
+	override fun onStart(view: ReadOnlyEntities.View<Entity, Filter>) {
 		intent(model
 				.state
 				.map { it.loading }

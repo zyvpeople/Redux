@@ -1,4 +1,4 @@
-package com.develop.zuzik.redux.model.entities
+package com.develop.zuzik.redux.model.readonlyentities
 
 import com.develop.zuzik.redux.core.Action
 import com.develop.zuzik.redux.core.ReduxModel
@@ -13,10 +13,10 @@ import io.reactivex.subjects.PublishSubject
  * User: zuzik
  * Date: 4/16/17
  */
-class EntitiesModel<Entity, Filter>(defaultFilter: Filter,
-									private val entitiesQuery: EntitiesQuery<Entity, Filter>) :
-		ReduxModel<EntitiesState<Entity, Filter>>(EntitiesState(Version(data = listOf()), Version(data = defaultFilter), false, null)),
-		Entities.Model<Entity, Filter> {
+class ReadOnlyEntitiesModel<Entity, Filter>(defaultFilter: Filter,
+											private val entitiesQuery: ReadOnlyEntitiesQuery<Entity, Filter>) :
+		ReduxModel<ReadOnlyEntitiesState<Entity, Filter>>(ReadOnlyEntitiesState(Version(data = listOf()), Version(data = defaultFilter), false, null)),
+		ReadOnlyEntities.Model<Entity, Filter> {
 
 	override val refresh: PublishSubject<Unit> = PublishSubject.create()
 	override val filter: BehaviorSubject<Filter> = BehaviorSubject.createDefault(defaultFilter)
@@ -28,13 +28,13 @@ class EntitiesModel<Entity, Filter>(defaultFilter: Filter,
 						filter,
 						BiFunction<Unit, Filter, Filter> { refresh, filter -> filter })
 				.switchMap { loadEntities(it) })
-		addReducer(EntitiesReducer())
+		addReducer(ReadOnlyEntitiesReducer())
 	}
 
 	private fun loadEntities(filter: Filter): Observable<Action> =
 			entitiesQuery
 					.query(filter)
-					.map<Action> { EntitiesAction.Load(it, filter) }
-					.startWith(EntitiesAction.BeginLoad<Entity, Filter>())
-					.onErrorReturn { EntitiesAction.HandleError<Entity, Filter>(it) }
+					.map<Action> { ReadOnlyEntitiesAction.Load(it, filter) }
+					.startWith(ReadOnlyEntitiesAction.BeginLoad<Entity, Filter>())
+					.onErrorReturn { ReadOnlyEntitiesAction.HandleError<Entity, Filter>(it) }
 }

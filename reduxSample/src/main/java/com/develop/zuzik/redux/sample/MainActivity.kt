@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.develop.zuzik.redux.R
 import com.develop.zuzik.redux.sample.editabledata.EditableDataActivity
-import com.develop.zuzik.redux.sample.entities.EntitiesActivity
+import com.develop.zuzik.redux.sample.readonlyentities.ReadOnlyEntitiesActivity
 import com.develop.zuzik.redux.sample.extension.startActivity
 import com.develop.zuzik.redux.sample.permissions.PermissionsActivity
 import com.develop.zuzik.redux.sample.readonlydata.ReadOnlyDataActivity
@@ -26,9 +26,9 @@ class MainActivity : AppCompatActivity() {
 		intent(btnEditableData
 				.clicks()
 				.subscribe(startActivity(EditableDataActivity::class.java)))
-		intent(btnEntities
+		intent(btnReadOnlyEntities
 				.clicks()
-				.subscribe(startActivity(EntitiesActivity::class.java)))
+				.subscribe(startActivity(ReadOnlyEntitiesActivity::class.java)))
 		intent(btnContacts
 				.clicks()
 				.subscribe(startActivity(PermissionsActivity::class.java)))
