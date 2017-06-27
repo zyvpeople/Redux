@@ -1,7 +1,7 @@
 package com.develop.zuzik.redux.sample.permissions
 
 import android.util.Log
-import com.develop.zuzik.redux.model.entities.EntitiesQuery
+import com.develop.zuzik.redux.model.readonlyentities.ReadOnlyEntitiesQuery
 import com.develop.zuzik.redux.model.permissions.Permission
 import com.develop.zuzik.redux.model.permissions.Permissions
 import io.reactivex.Observable
@@ -15,7 +15,7 @@ import java.util.*
 class EntitiesWithPermissionQuery(
 		private val permissionsModel: Permissions.Model,
 		private val tag: String,
-		private val permission: Permission) : EntitiesQuery<String, Unit> {
+		private val permission: Permission) : ReadOnlyEntitiesQuery<String, Unit> {
 
 	override fun query(filter: Unit): Observable<List<String>> =
 			Observable

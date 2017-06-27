@@ -1,4 +1,4 @@
-package com.develop.zuzik.redux.model.entities
+package com.develop.zuzik.redux.model.readonlyentities
 
 import io.reactivex.Observable
 
@@ -6,6 +6,6 @@ import io.reactivex.Observable
  * User: zuzik
  * Date: 4/16/17
  */
-interface EntitiesQuery<Entity, in Filter> {
+interface ReadOnlyEntitiesQuery<Entity, in Filter> {
 	fun query(filter: Filter): Observable<List<Entity>>
 }

@@ -1,4 +1,4 @@
-package com.develop.zuzik.redux.sample.entities
+package com.develop.zuzik.redux.sample.readonlyentities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.develop.zuzik.redux.R
 import com.develop.zuzik.redux.core.extension.asObserver
-import com.develop.zuzik.redux.model.entities.Entities
-import com.develop.zuzik.redux.model.entities.EntitiesModel
-import com.develop.zuzik.redux.model.entities.EntitiesPresenter
+import com.develop.zuzik.redux.model.readonlyentities.ReadOnlyEntities
+import com.develop.zuzik.redux.model.readonlyentities.ReadOnlyEntitiesModel
+import com.develop.zuzik.redux.model.readonlyentities.ReadOnlyEntitiesPresenter
 import com.develop.zuzik.redux.sample.entity.User
 import com.develop.zuzik.redux.sample.extension.showErrorToast
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
@@ -29,10 +29,10 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_entities.*
 import java.util.concurrent.TimeUnit
 
-class EntitiesActivity : AppCompatActivity() {
+class ReadOnlyEntitiesActivity : AppCompatActivity() {
 
-	private val model: Entities.Model<User, String> = EntitiesModel("", UsersQuery())
-	private val presenter: Entities.Presenter<User, String> = EntitiesPresenter(model)
+	private val model: ReadOnlyEntities.Model<User, String> = ReadOnlyEntitiesModel("", UsersQuery())
+	private val presenter: ReadOnlyEntities.Presenter<User, String> = ReadOnlyEntitiesPresenter(model)
 	private val compositeDisposable = CompositeDisposable()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +59,7 @@ class EntitiesActivity : AppCompatActivity() {
 			adapter.notifyDataSetChanged()
 		}
 
-		val view = object : Entities.View<User, String> {
+		val view = object : ReadOnlyEntities.View<User, String> {
 			override val displayProgress: Observer<in Boolean> = swipeRefreshLayout.refreshing().asObserver()
 			override val displayEntities: Observer<in List<User>> = displayUsers.asObserver()
 			override val displayError: PublishSubject<Throwable> = PublishSubject.create()

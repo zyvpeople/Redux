@@ -1,6 +1,6 @@
-package com.develop.zuzik.redux.sample.entities
+package com.develop.zuzik.redux.sample.readonlyentities
 
-import com.develop.zuzik.redux.model.entities.EntitiesQuery
+import com.develop.zuzik.redux.model.readonlyentities.ReadOnlyEntitiesQuery
 import com.develop.zuzik.redux.sample.entity.User
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
  * User: zuzik
  * Date: 4/16/17
  */
-class UsersQuery : EntitiesQuery<User, String> {
+class UsersQuery : ReadOnlyEntitiesQuery<User, String> {
 
 	private var counter = 0
 

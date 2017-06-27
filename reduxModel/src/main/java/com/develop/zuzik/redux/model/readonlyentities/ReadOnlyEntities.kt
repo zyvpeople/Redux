@@ -1,4 +1,4 @@
-package com.develop.zuzik.redux.model.entities
+package com.develop.zuzik.redux.model.readonlyentities
 
 import com.develop.zuzik.redux.core.Redux
 import io.reactivex.Observable
@@ -8,9 +8,9 @@ import io.reactivex.Observer
  * User: zuzik
  * Date: 4/16/17
  */
-interface Entities {
+interface ReadOnlyEntities {
 
-	interface Model<Entity, Filter> : Redux.Model<EntitiesState<Entity, Filter>> {
+	interface Model<Entity, Filter> : Redux.Model<ReadOnlyEntitiesState<Entity, Filter>> {
 		val refresh: Observer<Unit>
 		val filter: Observer<Filter>
 	}
