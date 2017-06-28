@@ -36,7 +36,6 @@ class OperationActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_operation)
-
 	}
 
 	override fun onStart() {
@@ -110,8 +109,8 @@ class OperationActivity : AppCompatActivity() {
 	}
 
 	override fun onStop() {
-		presenter.onStop()
 		compositeDisposable.clear()
+		presenter.onStop()
 		super.onStop()
 	}
 
