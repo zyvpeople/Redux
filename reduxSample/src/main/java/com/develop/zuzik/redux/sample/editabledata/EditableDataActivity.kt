@@ -40,7 +40,6 @@ class EditableDataActivity : AppCompatActivity() {
 
 	override fun onDestroy() {
 		model.release()
-		compositeDisposable.clear()
 		super.onDestroy()
 	}
 
@@ -115,6 +114,7 @@ class EditableDataActivity : AppCompatActivity() {
 	}
 
 	override fun onStop() {
+		compositeDisposable.clear()
 		presenter.onStop()
 		super.onStop()
 	}
