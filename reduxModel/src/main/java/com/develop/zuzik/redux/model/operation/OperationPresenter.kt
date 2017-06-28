@@ -15,6 +15,15 @@ class OperationPresenter<Data, Progress>(private val model: Operation.Model<Data
 		intent(model
 				.state
 				.subscribe { renderView(it, view)() })
+		intent(model
+				.success
+				.subscribe(view.displaySuccessNotification.asConsumer()))
+		intent(model
+				.fail
+				.subscribe(view.displayErrorNotification.asConsumer()))
+		intent(model
+				.canceled
+				.subscribe(view.displayCanceledNotification.asConsumer()))
 
 		intent(view
 				.onExecute
@@ -47,7 +56,6 @@ class OperationPresenter<Data, Progress>(private val model: Operation.Model<Data
 				view.displaySuccess.onNext(state.data)
 				view.hideError.onNext(UnitInstance.INSTANCE)
 				view.hideCanceled.onNext(UnitInstance.INSTANCE)
-				view.displaySuccessNotification.onNext(state.data)
 			}
 		}
 		is OperationState.Fail -> {
@@ -56,7 +64,6 @@ class OperationPresenter<Data, Progress>(private val model: Operation.Model<Data
 				view.hideSuccess.onNext(UnitInstance.INSTANCE)
 				view.displayError.onNext(state.data to state.error)
 				view.hideCanceled.onNext(UnitInstance.INSTANCE)
-				view.displayErrorNotification.onNext(state.data to state.error)
 			}
 		}
 		is OperationState.Canceled -> {
@@ -65,7 +72,6 @@ class OperationPresenter<Data, Progress>(private val model: Operation.Model<Data
 				view.hideSuccess.onNext(UnitInstance.INSTANCE)
 				view.hideError.onNext(UnitInstance.INSTANCE)
 				view.displayCanceled.onNext(state.data)
-				view.displayCanceledNotification.onNext(state.data)
 			}
 		}
 	}

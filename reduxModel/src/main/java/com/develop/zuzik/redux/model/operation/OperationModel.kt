@@ -15,6 +15,10 @@ class OperationModel<Data, Progress>(private val operationCommand: OperationComm
 	override val execute: PublishSubject<Data> = PublishSubject.create()
 	override val reset: PublishSubject<Unit> = PublishSubject.create()
 
+	override val success: PublishSubject<Data> = PublishSubject.create()
+	override val fail: PublishSubject<Pair<Data, Throwable>> = PublishSubject.create()
+	override val canceled: PublishSubject<Data> = PublishSubject.create()
+
 	init {
 		val executeUserAction = execute
 				.map { UserAction.Execute(it) }
@@ -29,8 +33,19 @@ class OperationModel<Data, Progress>(private val operationCommand: OperationComm
 								executeUserAction,
 								resetUserAction)
 						.switchMap(this::handleUserAction))
-
 		addReducer(OperationReducer())
+		addInterceptor {
+			val action = it as? OperationAction.SetSuccess<Data, Progress>
+			action?.let { success.onNext(it.data) }
+		}
+		addInterceptor {
+			val action = it as? OperationAction.SetFail<Data, Progress>
+			action?.let { fail.onNext(it.data to it.error) }
+		}
+		addInterceptor {
+			val action = it as? OperationAction.Cancel<Data, Progress>
+			action?.let { canceled.onNext(it.data) }
+		}
 	}
 
 	private fun resetToUserAction(state: OperationState<Data, Progress>): UserAction<Data> =

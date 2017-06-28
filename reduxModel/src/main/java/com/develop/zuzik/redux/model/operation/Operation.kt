@@ -12,6 +12,10 @@ interface Operation {
 	interface Model<Data, Progress> : Redux.Model<OperationState<Data, Progress>> {
 		val execute: Observer<Data>
 		val reset: Observer<Unit>
+
+		val success: Observable<Data>
+		val fail: Observable<Pair<Data, Throwable>>
+		val canceled: Observable<Data>
 	}
 
 	interface Presenter<Data, Progress> : Redux.Presenter<View<Data, Progress>>

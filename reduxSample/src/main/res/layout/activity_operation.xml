@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<android.support.v7.widget.AppCompatTextView
+		android:id="@+id/tvSuccess"
+		android:layout_width="match_parent"
+		android:layout_height="56dp"
+		android:background="@android:color/holo_green_light"
+		android:gravity="center"
+		tools:text="Success"/>
+
+	<android.support.v7.widget.AppCompatTextView
+		android:id="@+id/tvError"
+		android:layout_width="match_parent"
+		android:layout_height="56dp"
+		android:background="@android:color/holo_red_light"
+		android:gravity="center"
+		tools:text="Error"/>
+
+	<android.support.v7.widget.AppCompatTextView
+		android:id="@+id/tvCanceled"
+		android:layout_width="match_parent"
+		android:layout_height="56dp"
+		android:background="#ff0"
+		android:gravity="center"
+		tools:text="Canceled"/>
+
+	<android.support.v7.widget.AppCompatTextView
+		android:id="@+id/appCompatTextView"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Album for uploading"/>
+
+	<android.support.v7.widget.AppCompatEditText
+		android:id="@+id/etAlbumName"
+		android:layout_width="match_parent"
+		android:layout_height="56dp"
+		android:hint="Enter album name"/>
+
+	<LinearLayout
+		android:id="@+id/progressContainer"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:gravity="center"
+		android:orientation="vertical">
+
+		<ProgressBar
+			android:id="@+id/progress"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+
+		<android.support.v7.widget.AppCompatTextView
+			android:id="@+id/tvProgress"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			tools:text="0/100"/>
+
+	</LinearLayout>
+
+	<android.support.v7.widget.AppCompatButton
+		android:id="@+id/btnRun"
+		android:layout_width="match_parent"
+		android:layout_height="64dp"
+		android:text="Run"/>
+
+	<android.support.v7.widget.AppCompatButton
+		android:id="@+id/btnCancel"
+		android:layout_width="match_parent"
+		android:layout_height="64dp"
+		android:text="Cancel"/>
+
+</LinearLayout>
