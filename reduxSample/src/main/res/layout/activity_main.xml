@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-	android:id="@+id/activity_main"
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/activity_main"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical"
@@ -29,9 +29,15 @@
 		android:text="ReadOnlyEntities"/>
 
 	<android.support.v7.widget.AppCompatButton
-		android:id="@+id/btnContacts"
+		android:id="@+id/btnPermissions"
 		android:layout_width="match_parent"
 		android:layout_height="64dp"
-		android:text="Contacts (Permissions)"/>
+		android:text="Permissions"/>
+
+	<android.support.v7.widget.AppCompatButton
+		android:id="@+id/btnOperation"
+		android:layout_width="match_parent"
+		android:layout_height="64dp"
+		android:text="Operation"/>
 
 </LinearLayout>
