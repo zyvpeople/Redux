@@ -5,6 +5,7 @@ import com.develop.zuzik.redux.core.ReduxModel
 import com.develop.zuzik.redux.core.Version
 import com.develop.zuzik.redux.core.extension.UnitInstance
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 
 /**
@@ -14,7 +15,9 @@ import io.reactivex.subjects.PublishSubject
 class EditableDataModel<Data>(defaultData: Data,
 							  private val dataQuery: DataQuery<Data>,
 							  private val updateDataCommand: UpdateDataCommand<Data>) :
-		ReduxModel<EditableDataState<Data>>(EditableDataState(originalData = defaultData, editedData = Version(data = defaultData), loading = false, editing = false, error = null)),
+		ReduxModel<EditableDataState<Data>>(
+				EditableDataState(originalData = defaultData, editedData = Version(data = defaultData), loading = false, editing = false, error = null),
+				AndroidSchedulers.mainThread()),
 		EditableData.Model<Data> {
 
 	override val refresh: PublishSubject<Unit> = PublishSubject.create()

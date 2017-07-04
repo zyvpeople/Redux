@@ -16,7 +16,9 @@ import io.reactivex.subjects.PublishSubject
  * Date: 4/30/17
  */
 class PermissionsModel(private val context: Context) :
-		ReduxModel<PermissionsState>(PermissionsState(requests = emptyMap(), currentRequest = null)),
+		ReduxModel<PermissionsState>(
+				PermissionsState(requests = emptyMap(), currentRequest = null),
+				AndroidSchedulers.mainThread()),
 		Permissions.Model {
 
 	private val action = PublishSubject.create<Action>()

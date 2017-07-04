@@ -2,6 +2,8 @@ package com.develop.zuzik.redux.model.operation
 
 import com.develop.zuzik.redux.core.ReduxModel
 import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
@@ -10,7 +12,9 @@ import io.reactivex.subjects.PublishSubject
  */
 class OperationModel<Data, Progress>(private val operationCommand: OperationCommand<Data, Progress>) :
 		Operation.Model<Data, Progress>,
-		ReduxModel<OperationState<Data, Progress>>(OperationState.Waiting()) {
+		ReduxModel<OperationState<Data, Progress>>(
+				OperationState.Waiting(),
+				AndroidSchedulers.mainThread()) {
 
 	override val execute: PublishSubject<Data> = PublishSubject.create()
 	override val reset: PublishSubject<Unit> = PublishSubject.create()

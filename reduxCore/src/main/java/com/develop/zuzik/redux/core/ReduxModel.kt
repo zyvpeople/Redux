@@ -2,7 +2,7 @@ package com.develop.zuzik.redux.core
 
 import android.util.Log
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -11,7 +11,9 @@ import io.reactivex.subjects.PublishSubject
  * User: zuzik
  * Date: 4/15/17
  */
-abstract class ReduxModel<State>(private val defaultState: State) : Redux.Model<State> {
+abstract class ReduxModel<State>(
+		private val defaultState: State,
+		private val modelScheduler: Scheduler) : Redux.Model<State> {
 
 	override val state: BehaviorSubject<State> = BehaviorSubject.createDefault(defaultState)
 	override val error: PublishSubject<Throwable> = PublishSubject.create()
@@ -33,7 +35,7 @@ abstract class ReduxModel<State>(private val defaultState: State) : Redux.Model<
 	override fun init() {
 		disposable = ReduxStore(defaultState, decorate(actions), reducers)
 				.bind()
-				.observeOn(AndroidSchedulers.mainThread())
+				.observeOn(modelScheduler)
 				.doOnError(this::handleError)
 				.retry()
 				.subscribe { state.onNext(it) }
@@ -70,7 +72,7 @@ abstract class ReduxModel<State>(private val defaultState: State) : Redux.Model<
 			actions
 					.map {
 						it
-								.observeOn(AndroidSchedulers.mainThread())
+								.observeOn(modelScheduler)
 								.doOnNext {
 									compositeInterceptor.invoke(it)
 								}
