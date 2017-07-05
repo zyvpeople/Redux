@@ -44,6 +44,9 @@ class LockActivity : AppCompatActivity() {
 
 	override fun onStart() {
 		super.onStart()
+		intent(delaySettings
+				.delay
+				.subscribe(this::saveDelayToRepository))
 		intent(lockModel
 				.state
 				.subscribe {
@@ -79,4 +82,8 @@ class LockActivity : AppCompatActivity() {
 			}
 
 	private fun textToDelay(it: String) = it.toLongOrNull()?.let { Delay.Real(it, TimeUnit.SECONDS) } ?: Delay.Never()
+
+	private fun saveDelayToRepository(delay: Delay) {
+		//TODO: here you can save delay
+	}
 }
