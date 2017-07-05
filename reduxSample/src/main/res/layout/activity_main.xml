@@ -40,4 +40,10 @@
 		android:layout_height="64dp"
 		android:text="Operation"/>
 
+	<android.support.v7.widget.AppCompatButton
+		android:id="@+id/btnLock"
+		android:layout_width="match_parent"
+		android:layout_height="64dp"
+		android:text="Lock"/>
+
 </LinearLayout>
