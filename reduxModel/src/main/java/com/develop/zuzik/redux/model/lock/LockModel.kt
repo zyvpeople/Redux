@@ -6,6 +6,7 @@ import com.develop.zuzik.redux.model.lock.lock_timer.LockTimer
 import com.develop.zuzik.redux.model.lock.lock_timer.never.NeverLockTimer
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
 /**
@@ -28,7 +29,8 @@ class LockModel(private val lockTimer: LockTimer) :
 						.merge(
 								lock.map { false },
 								unlock.map { true },
-								startTimer.map { true },
+								startTimer
+										.withLatestFrom(state, BiFunction<Unit, LockState, Boolean> { _, state -> !state.locked }),
 								stopTimer.map { false })
 						.map {
 							if (it) {

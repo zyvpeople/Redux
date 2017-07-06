@@ -71,6 +71,11 @@ class LockActivity : AppCompatActivity() {
 		super.onStop()
 	}
 
+	override fun onUserInteraction() {
+		super.onUserInteraction()
+		lockModel.startTimer.onNext(UnitInstance.INSTANCE)
+	}
+
 	private fun intent(disposable: Disposable) {
 		compositeDisposable.add(disposable)
 	}
