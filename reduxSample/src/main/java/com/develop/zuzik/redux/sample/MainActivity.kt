@@ -6,6 +6,7 @@ import com.develop.zuzik.redux.R
 import com.develop.zuzik.redux.sample.editabledata.EditableDataActivity
 import com.develop.zuzik.redux.sample.readonlyentities.ReadOnlyEntitiesActivity
 import com.develop.zuzik.redux.sample.extension.startActivity
+import com.develop.zuzik.redux.sample.lock.LockActivity
 import com.develop.zuzik.redux.sample.operation.OperationActivity
 import com.develop.zuzik.redux.sample.permissions.PermissionsActivity
 import com.develop.zuzik.redux.sample.readonlydata.ReadOnlyDataActivity
@@ -36,6 +37,9 @@ class MainActivity : AppCompatActivity() {
 		intent(btnOperation
 				.clicks()
 				.subscribe(startActivity(OperationActivity::class.java)))
+		intent(btnLock
+				.clicks()
+				.subscribe(startActivity(LockActivity::class.java)))
 	}
 
 	override fun onDestroy() {
