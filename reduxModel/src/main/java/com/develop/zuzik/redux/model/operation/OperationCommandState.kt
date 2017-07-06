@@ -3,8 +3,8 @@ package com.develop.zuzik.redux.model.operation
 /**
  * Created by yaroslavzozulia on 6/28/17.
  */
-sealed class OperationCommandState<Data, Progress> {
-	class Progress<Data, Progress>(val data: Data, val progress: Progress) : OperationCommandState<Data, Progress>()
-	class Success<Data, Progress>(val data: Data) : OperationCommandState<Data, Progress>()
-	class Fail<Data, Progress>(val data: Data, val error: Throwable) : OperationCommandState<Data, Progress>()
+sealed class OperationCommandState<Input, Output, Progress> {
+	class Progress<Input, Output, Progress>(val input: Input, val progress: Progress) : OperationCommandState<Input, Output, Progress>()
+	class Success<Input, Output, Progress>(val output: Output) : OperationCommandState<Input, Output, Progress>()
+	class Fail<Input, Output, Progress>(val input: Input, val error: Throwable) : OperationCommandState<Input, Output, Progress>()
 }

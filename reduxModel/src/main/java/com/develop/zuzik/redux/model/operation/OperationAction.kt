@@ -5,11 +5,11 @@ import com.develop.zuzik.redux.core.Action
 /**
  * Created by yaroslavzozulia on 6/28/17.
  */
-sealed class OperationAction<Data, Progress> : Action {
+sealed class OperationAction<Input, Output, Progress> : Action {
 
-	class Wait<Data, Progress> : OperationAction<Data, Progress>()
-	class SetProgress<Data, Progress>(val data: Data, val progress: Progress) : OperationAction<Data, Progress>()
-	class SetSuccess<Data, Progress>(val data: Data) : OperationAction<Data, Progress>()
-	class SetFail<Data, Progress>(val data: Data, val error: Throwable) : OperationAction<Data, Progress>()
-	class Cancel<Data, Progress>(val data: Data) : OperationAction<Data, Progress>()
+	class Wait<Input, Output, Progress> : OperationAction<Input, Output, Progress>()
+	class SetProgress<Input, Output, Progress>(val input: Input, val progress: Progress) : OperationAction<Input, Output, Progress>()
+	class SetSuccess<Input, Output, Progress>(val output: Output) : OperationAction<Input, Output, Progress>()
+	class SetFail<Input, Output, Progress>(val input: Input, val error: Throwable) : OperationAction<Input, Output, Progress>()
+	class Cancel<Input, Output, Progress>(val input: Input) : OperationAction<Input, Output, Progress>()
 }

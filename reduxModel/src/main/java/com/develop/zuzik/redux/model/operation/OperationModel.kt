@@ -2,7 +2,6 @@ package com.develop.zuzik.redux.model.operation
 
 import com.develop.zuzik.redux.core.ReduxModel
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
@@ -10,24 +9,24 @@ import io.reactivex.subjects.PublishSubject
 /**
  * Created by yaroslavzozulia on 6/28/17.
  */
-class OperationModel<Data, Progress>(private val operationCommand: OperationCommand<Data, Progress>) :
-		Operation.Model<Data, Progress>,
-		ReduxModel<OperationState<Data, Progress>>(
+class OperationModel<Input, Output, Progress>(private val operationCommand: OperationCommand<Input, Output, Progress>) :
+		Operation.Model<Input, Output, Progress>,
+		ReduxModel<OperationState<Input, Output, Progress>>(
 				OperationState.Waiting(),
 				AndroidSchedulers.mainThread()) {
 
-	override val execute: PublishSubject<Data> = PublishSubject.create()
+	override val execute: PublishSubject<Input> = PublishSubject.create()
 	override val reset: PublishSubject<Unit> = PublishSubject.create()
 
-	override val success: PublishSubject<Data> = PublishSubject.create()
-	override val fail: PublishSubject<Pair<Data, Throwable>> = PublishSubject.create()
-	override val canceled: PublishSubject<Data> = PublishSubject.create()
+	override val success: PublishSubject<Output> = PublishSubject.create()
+	override val fail: PublishSubject<Pair<Input, Throwable>> = PublishSubject.create()
+	override val canceled: PublishSubject<Input> = PublishSubject.create()
 
 	init {
 		val executeUserAction = execute
 				.map { UserAction.Execute(it) }
 		val resetUserAction = reset
-				.withLatestFrom<OperationState<Data, Progress>, UserAction<Data>>(state, BiFunction { _, state ->
+				.withLatestFrom<OperationState<Input, Output, Progress>, UserAction<Input>>(state, BiFunction { _, state ->
 					resetToUserAction(state)
 				})
 
@@ -39,45 +38,45 @@ class OperationModel<Data, Progress>(private val operationCommand: OperationComm
 						.switchMap(this::handleUserAction))
 		addReducer(OperationReducer())
 		addInterceptor {
-			val action = it as? OperationAction.SetSuccess<Data, Progress>
-			action?.let { success.onNext(it.data) }
+			val action = it as? OperationAction.SetSuccess<Input, Output, Progress>
+			action?.let { success.onNext(it.output) }
 		}
 		addInterceptor {
-			val action = it as? OperationAction.SetFail<Data, Progress>
-			action?.let { fail.onNext(it.data to it.error) }
+			val action = it as? OperationAction.SetFail<Input, Output, Progress>
+			action?.let { fail.onNext(it.input to it.error) }
 		}
 		addInterceptor {
-			val action = it as? OperationAction.Cancel<Data, Progress>
-			action?.let { canceled.onNext(it.data) }
+			val action = it as? OperationAction.Cancel<Input, Output, Progress>
+			action?.let { canceled.onNext(it.input) }
 		}
 	}
 
-	private fun resetToUserAction(state: OperationState<Data, Progress>): UserAction<Data> =
+	private fun resetToUserAction(state: OperationState<Input, Output, Progress>): UserAction<Input> =
 			when (state) {
-				is OperationState.Progress -> UserAction.Cancel(state.data)
+				is OperationState.Progress -> UserAction.Cancel(state.input)
 				is OperationState.Waiting,
 				is OperationState.Success,
 				is OperationState.Fail,
 				is OperationState.Canceled -> UserAction.Clear()
 			}
 
-	private fun handleUserAction(userAction: UserAction<Data>): Observable<OperationAction<Data, Progress>> =
+	private fun handleUserAction(userAction: UserAction<Input>): Observable<OperationAction<Input, Output, Progress>> =
 			when (userAction) {
 				is UserAction.Execute ->
 					operationCommand
-							.execute(userAction.data)
+							.execute(userAction.input)
 							.map(this::operationCommandStateToAction)
-							.onErrorReturn { OperationAction.SetFail(userAction.data, it) }
+							.onErrorReturn { OperationAction.SetFail(userAction.input, it) }
 				is UserAction.Cancel ->
-					Observable.just(OperationAction.Cancel(userAction.data))
+					Observable.just(OperationAction.Cancel(userAction.input))
 				is UserAction.Clear ->
 					Observable.just(OperationAction.Wait())
 			}
 
-	private fun operationCommandStateToAction(state: OperationCommandState<Data, Progress>): OperationAction<Data, Progress> =
+	private fun operationCommandStateToAction(state: OperationCommandState<Input, Output, Progress>): OperationAction<Input, Output, Progress> =
 			when (state) {
-				is OperationCommandState.Progress -> OperationAction.SetProgress(state.data, state.progress)
-				is OperationCommandState.Success -> OperationAction.SetSuccess(state.data)
-				is OperationCommandState.Fail -> OperationAction.SetFail(state.data, state.error)
+				is OperationCommandState.Progress -> OperationAction.SetProgress(state.input, state.progress)
+				is OperationCommandState.Success -> OperationAction.SetSuccess(state.output)
+				is OperationCommandState.Fail -> OperationAction.SetFail(state.input, state.error)
 			}
 }

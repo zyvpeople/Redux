@@ -3,10 +3,10 @@ package com.develop.zuzik.redux.model.operation
 /**
  * Created by yaroslavzozulia on 6/27/17.
  */
-sealed class OperationState<Data, Progress> {
-	class Waiting<Data, Progress> : OperationState<Data, Progress>()
-	class Progress<Data, Progress>(val data: Data, val progress: Progress) : OperationState<Data, Progress>()
-	class Success<Data, Progress>(val data: Data) : OperationState<Data, Progress>()
-	class Fail<Data, Progress>(val data: Data, val error: Throwable) : OperationState<Data, Progress>()
-	class Canceled<Data, Progress>(val data: Data) : OperationState<Data, Progress>()
+sealed class OperationState<Input, Output, Progress> {
+	class Waiting<Input, Output, Progress> : OperationState<Input, Output, Progress>()
+	class Progress<Input, Output, Progress>(val input: Input, val progress: Progress) : OperationState<Input, Output, Progress>()
+	class Success<Input, Output, Progress>(val output: Output) : OperationState<Input, Output, Progress>()
+	class Fail<Input, Output, Progress>(val input: Input, val error: Throwable) : OperationState<Input, Output, Progress>()
+	class Canceled<Input, Output, Progress>(val input: Input) : OperationState<Input, Output, Progress>()
 }

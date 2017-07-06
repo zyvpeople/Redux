@@ -8,11 +8,11 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by yaroslavzozulia on 6/28/17.
  */
-class UploadAlbumOperationCommand : OperationCommand<String, Progress> {
+class UploadAlbumOperationCommand : OperationCommand<String, String, Progress> {
 
 	private var executionCounter = 0
 
-	override fun execute(data: String): Observable<OperationCommandState<String, Progress>> =
+	override fun execute(input: String): Observable<OperationCommandState<String, String, Progress>> =
 			Observable
 					.defer {
 						executionCounter++
@@ -20,13 +20,13 @@ class UploadAlbumOperationCommand : OperationCommand<String, Progress> {
 								.interval(0, 100, TimeUnit.MILLISECONDS)
 					}
 					.take(101)
-					.flatMap<OperationCommandState<String, Progress>> {
+					.flatMap<OperationCommandState<String, String, Progress>> {
 						if (executionCounter % 3 == 0 && it == 50L) {
 							Observable.error(RuntimeException("Fake error"))
 						} else if (it != 100L) {
-							Observable.just(OperationCommandState.Progress(data, Progress(it.toInt(), 100)))
+							Observable.just(OperationCommandState.Progress(input, Progress(it.toInt(), 100)))
 						} else {
-							Observable.just(OperationCommandState.Success(data))
+							Observable.just(OperationCommandState.Success(input))
 						}
 					}
 }

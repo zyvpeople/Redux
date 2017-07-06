@@ -7,11 +7,11 @@ import com.develop.zuzik.redux.core.extension.asConsumer
 /**
  * Created by yaroslavzozulia on 6/28/17.
  */
-class OperationPresenter<Data, Progress>(private val model: Operation.Model<Data, Progress>) :
-		Operation.Presenter<Data, Progress>,
-		ReduxPresenter<Operation.View<Data, Progress>>() {
+class OperationPresenter<Input, Output, Progress>(private val model: Operation.Model<Input, Output, Progress>) :
+		Operation.Presenter<Input, Output, Progress>,
+		ReduxPresenter<Operation.View<Input, Output, Progress>>() {
 
-	override fun onStart(view: Operation.View<Data, Progress>) {
+	override fun onStart(view: Operation.View<Input, Output, Progress>) {
 		intent(model
 				.state
 				.subscribe { renderView(it, view)() })
@@ -33,7 +33,7 @@ class OperationPresenter<Data, Progress>(private val model: Operation.Model<Data
 				.subscribe(model.reset.asConsumer()))
 	}
 
-	private fun renderView(state: OperationState<Data, Progress>, view: Operation.View<Data, Progress>): () -> Unit = when (state) {
+	private fun renderView(state: OperationState<Input, Output, Progress>, view: Operation.View<Input, Output, Progress>): () -> Unit = when (state) {
 		is OperationState.Waiting -> {
 			{
 				view.hideProgress.onNext(UnitInstance.INSTANCE)
@@ -44,7 +44,7 @@ class OperationPresenter<Data, Progress>(private val model: Operation.Model<Data
 		}
 		is OperationState.Progress -> {
 			{
-				view.displayProgress.onNext(state.data to state.progress)
+				view.displayProgress.onNext(state.input to state.progress)
 				view.hideSuccess.onNext(UnitInstance.INSTANCE)
 				view.hideError.onNext(UnitInstance.INSTANCE)
 				view.hideCanceled.onNext(UnitInstance.INSTANCE)
@@ -53,7 +53,7 @@ class OperationPresenter<Data, Progress>(private val model: Operation.Model<Data
 		is OperationState.Success -> {
 			{
 				view.hideProgress.onNext(UnitInstance.INSTANCE)
-				view.displaySuccess.onNext(state.data)
+				view.displaySuccess.onNext(state.output)
 				view.hideError.onNext(UnitInstance.INSTANCE)
 				view.hideCanceled.onNext(UnitInstance.INSTANCE)
 			}
@@ -62,7 +62,7 @@ class OperationPresenter<Data, Progress>(private val model: Operation.Model<Data
 			{
 				view.hideProgress.onNext(UnitInstance.INSTANCE)
 				view.hideSuccess.onNext(UnitInstance.INSTANCE)
-				view.displayError.onNext(state.data to state.error)
+				view.displayError.onNext(state.input to state.error)
 				view.hideCanceled.onNext(UnitInstance.INSTANCE)
 			}
 		}
@@ -71,7 +71,7 @@ class OperationPresenter<Data, Progress>(private val model: Operation.Model<Data
 				view.hideProgress.onNext(UnitInstance.INSTANCE)
 				view.hideSuccess.onNext(UnitInstance.INSTANCE)
 				view.hideError.onNext(UnitInstance.INSTANCE)
-				view.displayCanceled.onNext(state.data)
+				view.displayCanceled.onNext(state.input)
 			}
 		}
 	}

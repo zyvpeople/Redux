@@ -5,6 +5,6 @@ import io.reactivex.Observable
 /**
  * Created by yaroslavzozulia on 6/28/17.
  */
-interface OperationCommand<Data, Progress> {
-	fun execute(data: Data): Observable<OperationCommandState<Data, Progress>>
+interface OperationCommand<Input, Output, Progress> {
+	fun execute(input: Input): Observable<OperationCommandState<Input, Output, Progress>>
 }

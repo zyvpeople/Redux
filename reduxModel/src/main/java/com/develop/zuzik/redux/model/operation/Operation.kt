@@ -9,32 +9,32 @@ import io.reactivex.Observer
  */
 interface Operation {
 
-	interface Model<Data, Progress> : Redux.Model<OperationState<Data, Progress>> {
-		val execute: Observer<Data>
+	interface Model<Input, Output, Progress> : Redux.Model<OperationState<Input, Output, Progress>> {
+		val execute: Observer<Input>
 		val reset: Observer<Unit>
 
-		val success: Observable<Data>
-		val fail: Observable<Pair<Data, Throwable>>
-		val canceled: Observable<Data>
+		val success: Observable<Output>
+		val fail: Observable<Pair<Input, Throwable>>
+		val canceled: Observable<Input>
 	}
 
-	interface Presenter<Data, Progress> : Redux.Presenter<View<Data, Progress>>
+	interface Presenter<Input, Output, Progress> : Redux.Presenter<View<Input, Output, Progress>>
 
-	interface View<Data, Progress> : Redux.View {
-		val displayProgress: Observer<Pair<Data, Progress>>
+	interface View<Input, Output, Progress> : Redux.View {
+		val displayProgress: Observer<Pair<Input, Progress>>
 		val hideProgress: Observer<Unit>
-		val displaySuccess: Observer<Data>
+		val displaySuccess: Observer<Output>
 		val hideSuccess: Observer<Unit>
-		val displayError: Observer<Pair<Data, Throwable>>
+		val displayError: Observer<Pair<Input, Throwable>>
 		val hideError: Observer<Unit>
-		val displayCanceled: Observer<Data>
+		val displayCanceled: Observer<Input>
 		val hideCanceled: Observer<Unit>
 
-		val displaySuccessNotification: Observer<Data>
-		val displayErrorNotification: Observer<Pair<Data, Throwable>>
-		val displayCanceledNotification: Observer<Data>
+		val displaySuccessNotification: Observer<Output>
+		val displayErrorNotification: Observer<Pair<Input, Throwable>>
+		val displayCanceledNotification: Observer<Input>
 
-		val onExecute: Observable<Data>
+		val onExecute: Observable<Input>
 		val onReset: Observable<Unit>
 	}
 }

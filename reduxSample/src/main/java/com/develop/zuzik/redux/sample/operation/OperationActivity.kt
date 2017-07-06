@@ -23,14 +23,14 @@ class OperationActivity : AppCompatActivity() {
 
 	companion object Model {
 
-		val uploadAlbumOperationModel: Operation.Model<String, Progress> by lazy {
-			val model = OperationModel<String, Progress>(UploadAlbumOperationCommand())
+		val uploadAlbumOperationModel: Operation.Model<String, String, Progress> by lazy {
+			val model = OperationModel<String, String, Progress>(UploadAlbumOperationCommand())
 			model.init()
 			model
 		}
 	}
 
-	private val presenter: Operation.Presenter<String, Progress> = OperationPresenter(uploadAlbumOperationModel)
+	private val presenter: Operation.Presenter<String, String, Progress> = OperationPresenter(uploadAlbumOperationModel)
 	private val compositeDisposable = CompositeDisposable()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +41,7 @@ class OperationActivity : AppCompatActivity() {
 	override fun onStart() {
 		super.onStart()
 
-		val view = object : Operation.View<String, Progress> {
+		val view = object : Operation.View<String, String, Progress> {
 			override val displayProgress: PublishSubject<Pair<String, Progress>> = PublishSubject.create()
 			override val hideProgress: PublishSubject<Unit> = PublishSubject.create()
 			override val displaySuccess: PublishSubject<String> = PublishSubject.create()
