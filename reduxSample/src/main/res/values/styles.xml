@@ -8,4 +8,9 @@
 		<item name="colorAccent">@color/colorAccent</item>
 	</style>
 
+	<style name="feature_button">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">64dp</item>
+	</style>
+
 </resources>

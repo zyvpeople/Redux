@@ -12,38 +12,37 @@
 
 	<android.support.v7.widget.AppCompatButton
 		android:id="@+id/btnReadOnlyData"
-		android:layout_width="match_parent"
-		android:layout_height="64dp"
+		style="@style/feature_button"
 		android:text="Read only data"/>
 
 	<android.support.v7.widget.AppCompatButton
 		android:id="@+id/btnEditableData"
-		android:layout_width="match_parent"
-		android:layout_height="64dp"
+		style="@style/feature_button"
 		android:text="Editable data"/>
 
 	<android.support.v7.widget.AppCompatButton
 		android:id="@+id/btnReadOnlyEntities"
-		android:layout_width="match_parent"
-		android:layout_height="64dp"
+		style="@style/feature_button"
 		android:text="ReadOnlyEntities"/>
 
 	<android.support.v7.widget.AppCompatButton
 		android:id="@+id/btnPermissions"
-		android:layout_width="match_parent"
-		android:layout_height="64dp"
+		style="@style/feature_button"
 		android:text="Permissions"/>
 
 	<android.support.v7.widget.AppCompatButton
 		android:id="@+id/btnOperation"
-		android:layout_width="match_parent"
-		android:layout_height="64dp"
+		style="@style/feature_button"
 		android:text="Operation"/>
 
 	<android.support.v7.widget.AppCompatButton
 		android:id="@+id/btnLock"
-		android:layout_width="match_parent"
-		android:layout_height="64dp"
+		style="@style/feature_button"
 		android:text="Lock"/>
+
+	<android.support.v7.widget.AppCompatButton
+		android:id="@+id/btnSplash"
+		android:text="Splash"
+		style="@style/feature_button"/>
 
 </LinearLayout>

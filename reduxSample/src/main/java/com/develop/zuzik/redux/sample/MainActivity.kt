@@ -3,6 +3,8 @@ package com.develop.zuzik.redux.sample
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.develop.zuzik.redux.R
+import com.develop.zuzik.redux.model.splash.Splash
+import com.develop.zuzik.redux.model.splash.SplashAction
 import com.develop.zuzik.redux.sample.editabledata.EditableDataActivity
 import com.develop.zuzik.redux.sample.readonlyentities.ReadOnlyEntitiesActivity
 import com.develop.zuzik.redux.sample.extension.startActivity
@@ -10,6 +12,7 @@ import com.develop.zuzik.redux.sample.lock.LockActivity
 import com.develop.zuzik.redux.sample.operation.OperationActivity
 import com.develop.zuzik.redux.sample.permissions.PermissionsActivity
 import com.develop.zuzik.redux.sample.readonlydata.ReadOnlyDataActivity
+import com.develop.zuzik.redux.sample.splash.SplashActivity
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -40,6 +43,9 @@ class MainActivity : AppCompatActivity() {
 		intent(btnLock
 				.clicks()
 				.subscribe(startActivity(LockActivity::class.java)))
+		intent(btnSplash
+				.clicks()
+				.subscribe(startActivity(SplashActivity::class.java)))
 	}
 
 	override fun onDestroy() {
