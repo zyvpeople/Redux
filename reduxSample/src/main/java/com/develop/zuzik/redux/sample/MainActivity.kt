@@ -10,6 +10,7 @@ import com.develop.zuzik.redux.sample.readonlyentities.ReadOnlyEntitiesActivity
 import com.develop.zuzik.redux.sample.extension.startActivity
 import com.develop.zuzik.redux.sample.lock.LockActivity
 import com.develop.zuzik.redux.sample.operation.OperationActivity
+import com.develop.zuzik.redux.sample.pages.PagesActivity
 import com.develop.zuzik.redux.sample.permissions.PermissionsActivity
 import com.develop.zuzik.redux.sample.readonlydata.ReadOnlyDataActivity
 import com.develop.zuzik.redux.sample.splash.SplashActivity
@@ -46,6 +47,9 @@ class MainActivity : AppCompatActivity() {
 		intent(btnSplash
 				.clicks()
 				.subscribe(startActivity(SplashActivity::class.java)))
+		intent(btnPages
+				.clicks()
+				.subscribe(startActivity(PagesActivity::class.java)))
 	}
 
 	override fun onDestroy() {
