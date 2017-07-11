@@ -22,6 +22,7 @@ class PagesPresenter<Page>(private val model: Pages.Model<Page>) :
 
 		intent(view
 				.onNavigateToPage
-				.subscribe(model.navigateToPage::onNext))
+				.map { PagesAction.NavigateToPage(it) }
+				.subscribe(model.dispatch::onNext))
 	}
 }

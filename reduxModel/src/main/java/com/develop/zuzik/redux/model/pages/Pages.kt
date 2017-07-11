@@ -11,7 +11,7 @@ import io.reactivex.Observer
 interface Pages {
 
 	interface Model<Page> : Redux.Model<PagesState<Page>> {
-		val navigateToPage: Observer<Page>
+		val dispatch: Observer<PagesAction<Page>>
 	}
 
 	interface View<Page> : Redux.View {

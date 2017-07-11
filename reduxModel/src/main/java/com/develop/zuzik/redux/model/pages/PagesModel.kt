@@ -16,6 +16,7 @@ import io.reactivex.subjects.PublishSubject
 //TODO: set not existed page
 //TODO: add page, remove page, use tags
 //TODO: in case of view pager do not listen state but push separate events
+//TODO: page is active model (not data class) and needs init release methods etc
 class PagesModel<Page>(pages: List<Page>, currentPage: Page) :
 		ReduxModel<PagesState<Page>>(
 				defaultState = PagesState(
@@ -24,11 +25,10 @@ class PagesModel<Page>(pages: List<Page>, currentPage: Page) :
 				modelScheduler = AndroidSchedulers.mainThread()),
 		Pages.Model<Page> {
 
-	override val navigateToPage: PublishSubject<Page> = PublishSubject.create()
+	override val dispatch: PublishSubject<PagesAction<Page>> = PublishSubject.create()
 
 	init {
-		addAction(navigateToPage
-				.map { PagesAction.NavigateToPage(it) })
+		addAction(dispatch.map { it })
 		addReducer(PagesReducer())
 	}
 }

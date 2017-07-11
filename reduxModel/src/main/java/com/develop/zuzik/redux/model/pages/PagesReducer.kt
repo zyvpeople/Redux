@@ -15,6 +15,16 @@ class PagesReducer<Page> : Reducer<PagesState<Page>> {
 
 	private fun reduce(oldState: PagesState<Page>, action: PagesAction<Page>): PagesState<Page> =
 			when (action) {
-				is PagesAction.NavigateToPage -> oldState.copy(currentPage = action.page)
+				is PagesAction.NavigateToPage -> {
+					if (oldState.pages.data.contains(action.page)) {
+						oldState.copy(currentPage = action.page)
+					} else {
+						oldState
+					}
+				}
+				is PagesAction.AddPage -> TODO()
+				is PagesAction.RemovePage -> TODO()
+				is PagesAction.CompositePageAction ->
+					action.actions.fold(oldState, this::reduce)
 			}
 }
