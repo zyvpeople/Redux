@@ -1,8 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.view.ViewPager
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/viewPager"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:orientation="vertical">
 
-</android.support.v4.view.ViewPager>
+	<android.support.v4.view.ViewPager
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/viewPager"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="40dp"
+			android:orientation="horizontal">
+
+			<android.support.v7.widget.AppCompatEditText
+				android:id="@+id/etNewPage"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:hint="New page"/>
+
+			<android.support.v7.widget.AppCompatEditText
+				android:id="@+id/etExistedPage"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:hint="Existed page"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="40dp"
+			android:orientation="horizontal">
+
+			<android.support.v7.widget.AppCompatEditText
+				android:id="@+id/etNewPages"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:hint="New pages separated by ':'"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="40dp"
+			android:orientation="horizontal">
+
+			<android.support.v7.widget.AppCompatButton
+				android:id="@+id/btnAddToHead"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Add to head"/>
+
+			<android.support.v7.widget.AppCompatButton
+				android:id="@+id/btnAddToTail"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Add to tail"/>
+
+			<android.support.v7.widget.AppCompatButton
+				android:id="@+id/btnAddAfterPage"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Add after page"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="40dp"
+			android:orientation="horizontal">
+
+			<android.support.v7.widget.AppCompatButton
+				android:id="@+id/btnAddBeforePage"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Add before page"/>
+
+			<android.support.v7.widget.AppCompatButton
+				android:id="@+id/btnRemovePage"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Remove page"/>
+
+			<android.support.v7.widget.AppCompatButton
+				android:id="@+id/btnNavigateToPage"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Navigate to page"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="40dp"
+			android:orientation="horizontal">
+
+			<android.support.v7.widget.AppCompatButton
+				android:id="@+id/btnNavigateBack"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Navigate back"/>
+
+			<android.support.v7.widget.AppCompatButton
+				android:id="@+id/btnNavigateForward"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Navigate forward"/>
+
+			<android.support.v7.widget.AppCompatButton
+				android:id="@+id/btnSetPages"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Set pages"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>

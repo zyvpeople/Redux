@@ -18,7 +18,15 @@ interface Pages {
 		val displayPages: Observer<List<Page>>
 		val navigateToPage: Observer<Page>
 
+		val onAddPageToHead: Observable<Page>
+		val onAddPageToTail: Observable<Page>
+		val onAddPageAfterPage: Observable<Pair<Page, Page>>
+		val onAddPageBeforePage: Observable<Pair<Page, Page>>
+		val onRemovePage: Observable<Page>
 		val onNavigateToPage: Observable<Page>
+		val onNavigateBack: Observable<Unit>
+		val onNavigateForward: Observable<Unit>
+		val onSetPages: Observable<List<Page>>
 	}
 
 	interface Presenter<Page> : Redux.Presenter<View<Page>>

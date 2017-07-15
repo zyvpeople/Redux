@@ -1,7 +1,6 @@
 package com.develop.zuzik.redux.model.pages
 
 import com.develop.zuzik.redux.core.ReduxPresenter
-import com.develop.zuzik.redux.core.extension.UnitInstance
 
 /**
  * Created by yaroslavzozulia on 7/9/17.
@@ -21,8 +20,40 @@ class PagesPresenter<Page>(private val model: Pages.Model<Page>) :
 				.subscribe(view.navigateToPage::onNext))
 
 		intent(view
+				.onAddPageToHead
+				.map { PagesAction.AddPageToHead(it) }
+				.subscribe(model.dispatch::onNext))
+		intent(view
+				.onAddPageToTail
+				.map { PagesAction.AddPageToTail(it) }
+				.subscribe(model.dispatch::onNext))
+		intent(view
+				.onAddPageAfterPage
+				.map { PagesAction.AddPageAfterPage(it.first, it.second) }
+				.subscribe(model.dispatch::onNext))
+		intent(view
+				.onAddPageBeforePage
+				.map { PagesAction.AddPageBeforePage(it.first, it.second) }
+				.subscribe(model.dispatch::onNext))
+		intent(view
+				.onRemovePage
+				.map { PagesAction.RemovePage(it) }
+				.subscribe(model.dispatch::onNext))
+		intent(view
 				.onNavigateToPage
 				.map { PagesAction.NavigateToPage(it) }
+				.subscribe(model.dispatch::onNext))
+		intent(view
+				.onNavigateBack
+				.map { PagesAction.NavigateBack<Page>() }
+				.subscribe(model.dispatch::onNext))
+		intent(view
+				.onNavigateForward
+				.map { PagesAction.NavigateForward<Page>() }
+				.subscribe(model.dispatch::onNext))
+		intent(view
+				.onSetPages
+				.map { PagesAction.SetPages<Page>(it) }
 				.subscribe(model.dispatch::onNext))
 	}
 }

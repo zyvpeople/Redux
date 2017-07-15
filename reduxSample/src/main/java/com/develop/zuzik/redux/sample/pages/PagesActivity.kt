@@ -9,8 +9,8 @@ import com.develop.zuzik.redux.model.pages.PagesModel
 import com.develop.zuzik.redux.model.pages.PagesPresenter
 import com.develop.zuzik.redux.sample.pages.welcome.WelcomePage
 import com.develop.zuzik.redux.sample.pages.welcome.WelcomePagesAdapter
-import com.jakewharton.rxbinding2.support.v4.view.currentItem
 import com.jakewharton.rxbinding2.support.v4.view.pageSelections
+import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.functions.Consumer
@@ -44,21 +44,63 @@ class PagesActivity : AppCompatActivity() {
 	override fun onStart() {
 		super.onStart()
 		presenter.onStart(object : Pages.View<WelcomePage> {
-			override val displayPages: Observer<List<WelcomePage>> = Consumer<List<WelcomePage>> {
-				adapter.pages = it
-			}.asObserver()
-			override val navigateToPage: Observer<WelcomePage> = Consumer<WelcomePage> {
-				val pageIndex = adapter.pages.indexOf(it)
-				if (pageIndex != -1) {
-					viewPager.currentItem = pageIndex
-				}
-			}.asObserver()
-			override val onNavigateToPage: Observable<WelcomePage> = viewPager
-					.pageSelections()
-					.filter { 0 <= it && it < adapter.pages.size }
-					.map { adapter.pages[it] }
+			override val displayPages: Observer<List<WelcomePage>> = displayPages()
+			override val onNavigateToPage: Observable<WelcomePage> = onNavigateToPageByUsingSwipe()
+					.mergeWith(onNavigateToPageByUsingButton())
+			override val onAddPageToHead: Observable<WelcomePage> = btnAddToHead
+					.clicks()
+					.map { etNewPage.text.toString() }
+					.map(::WelcomePage)
+			override val onAddPageToTail: Observable<WelcomePage> = btnAddToTail
+					.clicks()
+					.map { etNewPage.text.toString() }
+					.map(::WelcomePage)
+			override val onAddPageAfterPage: Observable<Pair<WelcomePage, WelcomePage>> = btnAddAfterPage
+					.clicks()
+					.map { Pair(etNewPage.text.toString(), etExistedPage.text.toString()) }
+					.map { Pair(WelcomePage(it.first), WelcomePage(it.second)) }
+			override val onAddPageBeforePage: Observable<Pair<WelcomePage, WelcomePage>> = btnAddBeforePage
+					.clicks()
+					.map { Pair(etNewPage.text.toString(), etExistedPage.text.toString()) }
+					.map { Pair(WelcomePage(it.first), WelcomePage(it.second)) }
+			override val onRemovePage: Observable<WelcomePage> = btnRemovePage
+					.clicks()
+					.map { etNewPage.text.toString() }
+					.map(::WelcomePage)
+			override val navigateToPage: Observer<WelcomePage> = navigateToPage()
+			override val onNavigateBack: Observable<Unit> = btnNavigateBack.clicks()
+			override val onNavigateForward: Observable<Unit> = btnNavigateForward.clicks()
+			override val onSetPages: Observable<List<WelcomePage>> = btnSetPages
+					.clicks()
+					.map { etNewPages.text.toString() }
+					.map { it.split(':').map(::WelcomePage) }
 		})
 	}
+
+	private fun onNavigateToPageByUsingSwipe(): Observable<WelcomePage> {
+		return viewPager
+				.pageSelections()
+				.filter { 0 <= it && it < adapter.pages.size }
+				.map { adapter.pages[it] }
+	}
+
+	private fun onNavigateToPageByUsingButton(): Observable<WelcomePage> {
+		return btnNavigateToPage
+				.clicks()
+				.map { etNewPage.text.toString() }
+				.map(::WelcomePage)
+	}
+
+	private fun displayPages() = Consumer<List<WelcomePage>> {
+		adapter.pages = it
+	}.asObserver()
+
+	private fun navigateToPage() = Consumer<WelcomePage> {
+		val pageIndex = adapter.pages.indexOf(it)
+		if (pageIndex != -1) {
+			viewPager.currentItem = pageIndex
+		}
+	}.asObserver()
 
 	override fun onStop() {
 		presenter.onStop()

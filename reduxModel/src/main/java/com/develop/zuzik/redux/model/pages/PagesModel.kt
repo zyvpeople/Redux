@@ -10,11 +10,7 @@ import io.reactivex.subjects.PublishSubject
  */
 //TODO: implement logic for next cases:
 //TODO: check if current page not in pages (in constructor and in runtime)
-//TODO: navigate to not existed page
-//TODO: set pages
-//TODO: set zero pages
-//TODO: set not existed page
-//TODO: add page, remove page, use tags
+//TODO: use tags
 //TODO: in case of view pager do not listen state but push separate events
 //TODO: page is active model (not data class) and needs init release methods etc
 class PagesModel<Page>(pages: List<Page>, currentPage: Page) :
