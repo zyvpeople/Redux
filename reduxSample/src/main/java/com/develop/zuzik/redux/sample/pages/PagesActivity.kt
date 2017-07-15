@@ -3,6 +3,7 @@ package com.develop.zuzik.redux.sample.pages
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.develop.zuzik.redux.R
+import com.develop.zuzik.redux.core.Tag
 import com.develop.zuzik.redux.core.extension.asObserver
 import com.develop.zuzik.redux.model.pages.Pages
 import com.develop.zuzik.redux.model.pages.PagesModel
@@ -20,12 +21,12 @@ class PagesActivity : AppCompatActivity() {
 
 	companion object Models {
 		val pagesModel: Pages.Model<WelcomePage> by lazy {
-			val page1 = WelcomePage("Page 1")
-			val page2 = WelcomePage("Page 2")
-			val page3 = WelcomePage("Page 3")
-			val page4 = WelcomePage("Page 4")
+			val page1 = Tag("1", WelcomePage("1"))
+			val page2 = Tag("2", WelcomePage("2"))
+			val page3 = Tag("3", WelcomePage("3"))
+			val page4 = Tag("4", WelcomePage("4"))
 			val pages = listOf(page1, page2, page3, page4)
-			val model = PagesModel(pages, page1)
+			val model = PagesModel(pages, "1")
 			model.init()
 			model
 		}
@@ -44,59 +45,53 @@ class PagesActivity : AppCompatActivity() {
 	override fun onStart() {
 		super.onStart()
 		presenter.onStart(object : Pages.View<WelcomePage> {
-			override val displayPages: Observer<List<WelcomePage>> = displayPages()
-			override val onNavigateToPage: Observable<WelcomePage> = onNavigateToPageByUsingSwipe()
+			override val displayPages: Observer<List<Tag<WelcomePage>>> = displayPages()
+			override val onNavigateToPage: Observable<String> = onNavigateToPageByUsingSwipe()
 					.mergeWith(onNavigateToPageByUsingButton())
-			override val onAddPageToHead: Observable<WelcomePage> = btnAddToHead
+			override val onAddPageToHead: Observable<Tag<WelcomePage>> = btnAddToHead
 					.clicks()
 					.map { etNewPage.text.toString() }
-					.map(::WelcomePage)
-			override val onAddPageToTail: Observable<WelcomePage> = btnAddToTail
+					.map { Tag(it, WelcomePage(it)) }
+			override val onAddPageToTail: Observable<Tag<WelcomePage>> = btnAddToTail
 					.clicks()
 					.map { etNewPage.text.toString() }
-					.map(::WelcomePage)
-			override val onAddPageAfterPage: Observable<Pair<WelcomePage, WelcomePage>> = btnAddAfterPage
+					.map { Tag(it, WelcomePage(it)) }
+			override val onAddPageAfterPage: Observable<Pair<Tag<WelcomePage>, String>> = btnAddAfterPage
 					.clicks()
 					.map { Pair(etNewPage.text.toString(), etExistedPage.text.toString()) }
-					.map { Pair(WelcomePage(it.first), WelcomePage(it.second)) }
-			override val onAddPageBeforePage: Observable<Pair<WelcomePage, WelcomePage>> = btnAddBeforePage
+					.map { Pair(Tag(it.first, WelcomePage(it.first)), it.second) }
+			override val onAddPageBeforePage: Observable<Pair<Tag<WelcomePage>, String>> = btnAddBeforePage
 					.clicks()
 					.map { Pair(etNewPage.text.toString(), etExistedPage.text.toString()) }
-					.map { Pair(WelcomePage(it.first), WelcomePage(it.second)) }
-			override val onRemovePage: Observable<WelcomePage> = btnRemovePage
+					.map { Pair(Tag(it.first, WelcomePage(it.first)), it.second) }
+			override val onRemovePage: Observable<String> = btnRemovePage
 					.clicks()
 					.map { etNewPage.text.toString() }
-					.map(::WelcomePage)
-			override val navigateToPage: Observer<WelcomePage> = navigateToPage()
+			override val navigateToPage: Observer<String> = navigateToPage()
 			override val onNavigateBack: Observable<Unit> = btnNavigateBack.clicks()
 			override val onNavigateForward: Observable<Unit> = btnNavigateForward.clicks()
-			override val onSetPages: Observable<List<WelcomePage>> = btnSetPages
+			override val onSetPages: Observable<List<Tag<WelcomePage>>> = btnSetPages
 					.clicks()
 					.map { etNewPages.text.toString() }
-					.map { it.split(':').map(::WelcomePage) }
+					.map { it.split(':').map { Tag(it, WelcomePage(it)) } }
 		})
 	}
 
-	private fun onNavigateToPageByUsingSwipe(): Observable<WelcomePage> {
-		return viewPager
-				.pageSelections()
-				.filter { 0 <= it && it < adapter.pages.size }
-				.map { adapter.pages[it] }
-	}
+	private fun onNavigateToPageByUsingSwipe(): Observable<String> = viewPager
+			.pageSelections()
+			.filter { 0 <= it && it < adapter.pages.size }
+			.map { adapter.pages[it].tag }
 
-	private fun onNavigateToPageByUsingButton(): Observable<WelcomePage> {
-		return btnNavigateToPage
-				.clicks()
-				.map { etNewPage.text.toString() }
-				.map(::WelcomePage)
-	}
+	private fun onNavigateToPageByUsingButton(): Observable<String> = btnNavigateToPage
+			.clicks()
+			.map { etNewPage.text.toString() }
 
-	private fun displayPages() = Consumer<List<WelcomePage>> {
+	private fun displayPages() = Consumer<List<Tag<WelcomePage>>> {
 		adapter.pages = it
 	}.asObserver()
 
-	private fun navigateToPage() = Consumer<WelcomePage> {
-		val pageIndex = adapter.pages.indexOf(it)
+	private fun navigateToPage() = Consumer<String> { pageTag ->
+		val pageIndex = adapter.pages.indexOfFirst { it.tag == pageTag }
 		if (pageIndex != -1) {
 			viewPager.currentItem = pageIndex
 		}

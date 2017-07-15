@@ -1,6 +1,7 @@
 package com.develop.zuzik.redux.model.pages
 
 import com.develop.zuzik.redux.core.ReduxModel
+import com.develop.zuzik.redux.core.Tag
 import com.develop.zuzik.redux.core.Version
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
@@ -13,11 +14,11 @@ import io.reactivex.subjects.PublishSubject
 //TODO: use tags
 //TODO: in case of view pager do not listen state but push separate events
 //TODO: page is active model (not data class) and needs init release methods etc
-class PagesModel<Page>(pages: List<Page>, currentPage: Page) :
+class PagesModel<Page>(pages: List<Tag<Page>>, currentPageTag: String) :
 		ReduxModel<PagesState<Page>>(
 				defaultState = PagesState(
 						pages = Version(data = pages),
-						currentPage = currentPage),
+						currentPageTag = currentPageTag),
 				modelScheduler = AndroidSchedulers.mainThread()),
 		Pages.Model<Page> {
 

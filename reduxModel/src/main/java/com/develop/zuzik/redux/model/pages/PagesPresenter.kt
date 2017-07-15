@@ -13,10 +13,11 @@ class PagesPresenter<Page>(private val model: Pages.Model<Page>) :
 		intent(model
 				.versionProperty { it.pages }
 				.subscribe(view.displayPages::onNext))
+		//TODO: handle situation when pages exist but current page is null
 		intent(model
 				.state
-				.filter { it.currentPage != null }
-				.map { it.currentPage!! }
+				.filter { it.currentPageTag != null }
+				.map { it.currentPageTag!! }
 				.subscribe(view.navigateToPage::onNext))
 
 		intent(view
@@ -37,11 +38,11 @@ class PagesPresenter<Page>(private val model: Pages.Model<Page>) :
 				.subscribe(model.dispatch::onNext))
 		intent(view
 				.onRemovePage
-				.map { PagesAction.RemovePage(it) }
+				.map { PagesAction.RemovePage<Page>(it) }
 				.subscribe(model.dispatch::onNext))
 		intent(view
 				.onNavigateToPage
-				.map { PagesAction.NavigateToPage(it) }
+				.map { PagesAction.NavigateToPage<Page>(it) }
 				.subscribe(model.dispatch::onNext))
 		intent(view
 				.onNavigateBack

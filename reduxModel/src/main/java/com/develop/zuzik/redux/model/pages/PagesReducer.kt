@@ -2,6 +2,7 @@ package com.develop.zuzik.redux.model.pages
 
 import com.develop.zuzik.redux.core.Action
 import com.develop.zuzik.redux.core.Reducer
+import com.develop.zuzik.redux.core.Tag
 
 /**
  * Created by yaroslavzozulia on 7/9/17.
@@ -31,80 +32,80 @@ class PagesReducer<Page> : Reducer<PagesState<Page>> {
 				is PagesAction.SetPages -> reduceSetPages(oldState, action)
 			}
 
-	private fun reduceAddPageToTail(oldState: PagesState<Page>, action: PagesAction.AddPageToTail<Page>): PagesState<Page> =
-			if (oldState.pages.data.contains(action.page)) {
-				oldState
-			} else {
-				val pagesWithNewTail = oldState.pages.data + action.page
-				oldState.copy(pages = oldState.pages.newVersion(pagesWithNewTail))
-			}
-
 	private fun reduceAddPageToHead(oldState: PagesState<Page>, action: PagesAction.AddPageToHead<Page>): PagesState<Page> =
-			if (oldState.pages.data.contains(action.page)) {
+			if (pageExists(oldState, action.page)) {
 				oldState
 			} else {
 				val pagesWithNewHead = oldState.pages.data.toMutableList().apply { add(0, action.page) }.toList()
 				oldState.copy(pages = oldState.pages.newVersion(pagesWithNewHead))
 			}
 
-	private fun reduceAddPageAfterPage(oldState: PagesState<Page>, action: PagesAction.AddPageAfterPage<Page>): PagesState<Page> =
-			if (!oldState.pages.data.contains(action.existedPage)
-					|| oldState.pages.data.contains(action.page)) {
+	private fun reduceAddPageToTail(oldState: PagesState<Page>, action: PagesAction.AddPageToTail<Page>): PagesState<Page> =
+			if (pageExists(oldState, action.page)) {
 				oldState
 			} else {
-				val existedPagePosition = oldState.pages.data.indexOf(action.existedPage)
+				val pagesWithNewTail = oldState.pages.data + action.page
+				oldState.copy(pages = oldState.pages.newVersion(pagesWithNewTail))
+			}
+
+	private fun reduceAddPageAfterPage(oldState: PagesState<Page>, action: PagesAction.AddPageAfterPage<Page>): PagesState<Page> =
+			if (!pageExists(oldState, action.existedPageTag)
+					|| pageExists(oldState, action.page)) {
+				oldState
+			} else {
+				val existedPagePosition = pageIndex(oldState, action.existedPageTag)
 				val pagesWithInsertedPage = oldState.pages.data.toMutableList().apply { add(existedPagePosition + 1, action.page) }.toList()
 				oldState.copy(pages = oldState.pages.newVersion(pagesWithInsertedPage))
 			}
 
 	private fun reduceAddPageBeforePage(oldState: PagesState<Page>, action: PagesAction.AddPageBeforePage<Page>): PagesState<Page> =
-			if (!oldState.pages.data.contains(action.existedPage)
-					|| oldState.pages.data.contains(action.page)) {
+			if (!pageExists(oldState, action.existedPageTag)
+					|| pageExists(oldState, action.page)) {
 				oldState
 			} else {
-				val existedPagePosition = oldState.pages.data.indexOf(action.existedPage)
+				val existedPagePosition = pageIndex(oldState, action.existedPageTag)
 				val pagesWithInsertedPage = oldState.pages.data.toMutableList().apply { add(existedPagePosition, action.page) }.toList()
 				oldState.copy(pages = oldState.pages.newVersion(pagesWithInsertedPage))
 			}
 
 	private fun reduceRemovePage(oldState: PagesState<Page>, action: PagesAction.RemovePage<Page>): PagesState<Page> =
-			if (!oldState.pages.data.contains(action.page)) {
+			if (!pageExists(oldState, action.pageTag)) {
 				oldState
 			} else {
-				val pagePosition = oldState.pages.data.indexOf(action.page)
+				val pagePosition = pageIndex(oldState, action.pageTag)
 				val pagesWithRemovedPage = oldState.pages.data.toMutableList().apply { removeAt(pagePosition) }.toList()
-				val clearCurrentPage = action.page == oldState.currentPage
+				val clearCurrentPage = action.pageTag == oldState.currentPageTag
 				oldState.copy(
 						pages = oldState.pages.newVersion(pagesWithRemovedPage),
-						currentPage = if (clearCurrentPage) null else oldState.currentPage)
+						currentPageTag = if (clearCurrentPage) null else oldState.currentPageTag)
 			}
 
 	private fun reduceNavigateToPage(oldState: PagesState<Page>, action: PagesAction.NavigateToPage<Page>): PagesState<Page> =
-			if (!oldState.pages.data.contains(action.page)) {
+			if (!pageExists(oldState, action.pageTag)) {
 				oldState
 			} else {
-				oldState.copy(currentPage = action.page)
+				oldState.copy(currentPageTag = action.pageTag)
 			}
 
 	private fun reduceNavigateBack(oldState: PagesState<Page>, action: PagesAction.NavigateBack<Page>): PagesState<Page> =
-			if (oldState.currentPage == null) {
+			if (oldState.currentPageTag == null) {
 				oldState
 			} else {
-				val currentPageIndex = oldState.pages.data.indexOf(oldState.currentPage)
+				val currentPageIndex = pageIndex(oldState, oldState.currentPageTag)
 				if (currentPageIndex > 0) {
-					oldState.copy(currentPage = oldState.pages.data[currentPageIndex - 1])
+					oldState.copy(currentPageTag = oldState.pages.data[currentPageIndex - 1].tag)
 				} else {
 					oldState
 				}
 			}
 
 	private fun reduceNavigateForward(oldState: PagesState<Page>, action: PagesAction.NavigateForward<Page>): PagesState<Page> =
-			if (oldState.currentPage == null) {
+			if (oldState.currentPageTag == null) {
 				oldState
 			} else {
-				val currentPageIndex = oldState.pages.data.indexOf(oldState.currentPage)
+				val currentPageIndex = pageIndex(oldState, oldState.currentPageTag)
 				if ((0 until (oldState.pages.data.size - 1)).contains(currentPageIndex)) {
-					oldState.copy(currentPage = oldState.pages.data[currentPageIndex + 1])
+					oldState.copy(currentPageTag = oldState.pages.data[currentPageIndex + 1].tag)
 				} else {
 					oldState
 				}
@@ -118,5 +119,17 @@ class PagesReducer<Page> : Reducer<PagesState<Page>> {
 	private fun reduceSetPages(oldState: PagesState<Page>, action: PagesAction.SetPages<Page>): PagesState<Page> =
 			oldState.copy(
 					pages = oldState.pages.newVersion(action.pages),
-					currentPage = null)
+					currentPageTag = null)
+
+	private fun pageExists(state: PagesState<Page>, page: Tag<Page>): Boolean =
+			pageExists(state, page.tag)
+
+	private fun pageExists(state: PagesState<Page>, pageTag: String): Boolean =
+			pageIndex(state, pageTag) != -1
+
+	private fun pageIndex(state: PagesState<Page>, page: Tag<String>): Int =
+			pageIndex(state, page.tag)
+
+	private fun pageIndex(state: PagesState<Page>, pageTag: String): Int =
+			state.pages.data.indexOfFirst { it.tag == pageTag }
 }

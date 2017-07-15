@@ -15,15 +15,15 @@ class WelcomePageFragment : Fragment() {
 
 	companion object Factory {
 
-		fun create(title: String) = WelcomePageFragment().apply {
+		fun create(page: WelcomePage) = WelcomePageFragment().apply {
 			arguments = Bundle().apply {
-				putString("title", title)
+				putSerializable("page", page)
 			}
 		}
 	}
 
 	override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
 			inflater?.inflate(R.layout.fragment_welcome_page, null)?.apply {
-				tvTitle.text = arguments.getString("title")
+				tvTitle.text = arguments.getSerializable("page").toString()
 			}
 }
