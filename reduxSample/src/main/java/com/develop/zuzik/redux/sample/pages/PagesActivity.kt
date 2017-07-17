@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import com.develop.zuzik.redux.R
 import com.develop.zuzik.redux.core.Tag
 import com.develop.zuzik.redux.core.extension.asObserver
+import com.develop.zuzik.redux.model.pages.DoNothingPageInteractionStrategy
 import com.develop.zuzik.redux.model.pages.Pages
 import com.develop.zuzik.redux.model.pages.PagesModel
 import com.develop.zuzik.redux.model.pages.PagesPresenter
@@ -26,7 +27,7 @@ class PagesActivity : AppCompatActivity() {
 			val page3 = Tag("3", WelcomePage("3"))
 			val page4 = Tag("4", WelcomePage("4"))
 			val pages = listOf(page1, page2, page3, page4)
-			val model = PagesModel(pages, "1")
+			val model = PagesModel(pages, "1", DoNothingPageInteractionStrategy())
 			model.init()
 			model
 		}

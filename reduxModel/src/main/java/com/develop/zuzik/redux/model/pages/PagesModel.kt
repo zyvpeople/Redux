@@ -14,7 +14,9 @@ import io.reactivex.subjects.PublishSubject
 //TODO: use tags
 //TODO: in case of view pager do not listen state but push separate events
 //TODO: page is active model (not data class) and needs init release methods etc
-class PagesModel<Page>(pages: List<Tag<Page>>, currentPageTag: String) :
+class PagesModel<Page>(pages: List<Tag<Page>>,
+					   currentPageTag: String,
+					   pageInteractionStrategy: PageInteractionStrategy<Page>) :
 		ReduxModel<PagesState<Page>>(
 				defaultState = PagesState(
 						pages = Version(data = pages),
@@ -26,6 +28,6 @@ class PagesModel<Page>(pages: List<Tag<Page>>, currentPageTag: String) :
 
 	init {
 		addAction(dispatch.map { it })
-		addReducer(PagesReducer())
+		addReducer(PagesReducer(pageInteractionStrategy))
 	}
 }
