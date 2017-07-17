@@ -7,8 +7,6 @@ import com.develop.zuzik.redux.core.Tag
 /**
  * Created by yaroslavzozulia on 7/9/17.
  */
-//TODO: add logic to init/release start/stop page when add/remove navigate
-//TODO: check by tag or reference or equality
 //TODO: add strategy for history when navigate
 //TODO: add strategy for navigation when remove
 class PagesReducer<Page>(private val pageInteractionStrategy: PageInteractionStrategy<Page>) : Reducer<PagesState<Page>> {
@@ -29,7 +27,6 @@ class PagesReducer<Page>(private val pageInteractionStrategy: PageInteractionStr
 				is PagesAction.NavigateBack -> reduceNavigateBack(oldState, action)
 				is PagesAction.NavigateForward -> reduceNavigateForward(oldState, action)
 				is PagesAction.CompositePageAction -> reduceCompositePageAction(oldState, action)
-				is PagesAction.SetPages -> reduceSetPages(oldState, action)
 			}
 
 	private fun reduceAddPageToHead(oldState: PagesState<Page>, action: PagesAction.AddPageToHead<Page>): PagesState<Page> =
@@ -128,12 +125,6 @@ class PagesReducer<Page>(private val pageInteractionStrategy: PageInteractionStr
 					.actions
 					.fold(oldState, this::reduce)
 
-	//TODO
-	private fun reduceSetPages(oldState: PagesState<Page>, action: PagesAction.SetPages<Page>): PagesState<Page> =
-			oldState.copy(
-					pages = oldState.pages.newVersion(action.pages),
-					currentPageTag = null)
-
 	private fun pageExists(state: PagesState<Page>, page: Tag<Page>): Boolean =
 			pageExists(state, page.tag)
 
@@ -154,7 +145,13 @@ class PagesReducer<Page>(private val pageInteractionStrategy: PageInteractionStr
 			updatePages { it.toMutableList().apply { removeAt(position) }.toList() }
 
 	private fun <Page> PagesState<Page>.updatePageAtPosition(position: Int, updatePage: (Page) -> Page) =
-			updatePages { it.toMutableList().apply { add(position, removeAt(position).updateData(updatePage::invoke)) }.toList() }
+			updatePages {
+				it.toMutableList().apply {
+					val removeAt = removeAt(position)
+					val updateAt = removeAt.updateData(updatePage)
+					add(position, updateAt)
+				}.toList()
+			}
 
 	private fun <Page> PagesState<Page>.updatePages(updatePages: (List<Tag<Page>>) -> List<Tag<Page>>) =
 			copy(pages = pages.newVersion(data = updatePages(pages.data)))

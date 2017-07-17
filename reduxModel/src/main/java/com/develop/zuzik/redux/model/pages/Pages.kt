@@ -28,7 +28,6 @@ interface Pages {
 		val onNavigateToPage: Observable<String>
 		val onNavigateBack: Observable<Unit>
 		val onNavigateForward: Observable<Unit>
-		val onSetPages: Observable<List<Tag<Page>>>
 	}
 
 	interface Presenter<Page> : Redux.Presenter<View<Page>>

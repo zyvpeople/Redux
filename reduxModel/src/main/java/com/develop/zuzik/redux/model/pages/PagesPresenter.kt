@@ -52,9 +52,5 @@ class PagesPresenter<Page>(private val model: Pages.Model<Page>) :
 				.onNavigateForward
 				.map { PagesAction.NavigateForward<Page>() }
 				.subscribe(model.dispatch::onNext))
-		intent(view
-				.onSetPages
-				.map { PagesAction.SetPages<Page>(it) }
-				.subscribe(model.dispatch::onNext))
 	}
 }

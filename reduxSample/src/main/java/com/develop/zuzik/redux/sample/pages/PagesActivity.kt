@@ -10,6 +10,7 @@ import com.develop.zuzik.redux.model.pages.Pages
 import com.develop.zuzik.redux.model.pages.PagesModel
 import com.develop.zuzik.redux.model.pages.PagesPresenter
 import com.develop.zuzik.redux.sample.pages.welcome.WelcomePage
+import com.develop.zuzik.redux.sample.pages.welcome.WelcomePageInteractionStrategy
 import com.develop.zuzik.redux.sample.pages.welcome.WelcomePagesAdapter
 import com.jakewharton.rxbinding2.support.v4.view.pageSelections
 import com.jakewharton.rxbinding2.view.clicks
@@ -22,12 +23,12 @@ class PagesActivity : AppCompatActivity() {
 
 	companion object Models {
 		val pagesModel: Pages.Model<WelcomePage> by lazy {
-			val page1 = Tag("1", WelcomePage("1"))
-			val page2 = Tag("2", WelcomePage("2"))
-			val page3 = Tag("3", WelcomePage("3"))
-			val page4 = Tag("4", WelcomePage("4"))
+			val page1 = Tag("1", WelcomePage("1", false, false))
+			val page2 = Tag("2", WelcomePage("2", false, false))
+			val page3 = Tag("3", WelcomePage("3", false, false))
+			val page4 = Tag("4", WelcomePage("4", false, false))
 			val pages = listOf(page1, page2, page3, page4)
-			val model = PagesModel(pages, "1", DoNothingPageInteractionStrategy())
+			val model = PagesModel(pages, "2", WelcomePageInteractionStrategy())
 			model.init()
 			model
 		}
@@ -52,29 +53,25 @@ class PagesActivity : AppCompatActivity() {
 			override val onAddPageToHead: Observable<Tag<WelcomePage>> = btnAddToHead
 					.clicks()
 					.map { etNewPage.text.toString() }
-					.map { Tag(it, WelcomePage(it)) }
+					.map { Tag(it, WelcomePage(it, false, false)) }
 			override val onAddPageToTail: Observable<Tag<WelcomePage>> = btnAddToTail
 					.clicks()
 					.map { etNewPage.text.toString() }
-					.map { Tag(it, WelcomePage(it)) }
+					.map { Tag(it, WelcomePage(it, false, false)) }
 			override val onAddPageAfterPage: Observable<Pair<Tag<WelcomePage>, String>> = btnAddAfterPage
 					.clicks()
 					.map { Pair(etNewPage.text.toString(), etExistedPage.text.toString()) }
-					.map { Pair(Tag(it.first, WelcomePage(it.first)), it.second) }
+					.map { Pair(Tag(it.first, WelcomePage(it.first, false, false)), it.second) }
 			override val onAddPageBeforePage: Observable<Pair<Tag<WelcomePage>, String>> = btnAddBeforePage
 					.clicks()
 					.map { Pair(etNewPage.text.toString(), etExistedPage.text.toString()) }
-					.map { Pair(Tag(it.first, WelcomePage(it.first)), it.second) }
+					.map { Pair(Tag(it.first, WelcomePage(it.first, false, false)), it.second) }
 			override val onRemovePage: Observable<String> = btnRemovePage
 					.clicks()
 					.map { etNewPage.text.toString() }
 			override val navigateToPage: Observer<String> = navigateToPage()
 			override val onNavigateBack: Observable<Unit> = btnNavigateBack.clicks()
 			override val onNavigateForward: Observable<Unit> = btnNavigateForward.clicks()
-			override val onSetPages: Observable<List<Tag<WelcomePage>>> = btnSetPages
-					.clicks()
-					.map { etNewPages.text.toString() }
-					.map { it.split(':').map { Tag(it, WelcomePage(it)) } }
 		})
 	}
 

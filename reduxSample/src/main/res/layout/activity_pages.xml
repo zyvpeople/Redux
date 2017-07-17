@@ -126,13 +126,6 @@
 				android:layout_weight="1"
 				android:text="Navigate forward"/>
 
-			<android.support.v7.widget.AppCompatButton
-				android:id="@+id/btnSetPages"
-				android:layout_width="0dp"
-				android:layout_height="match_parent"
-				android:layout_weight="1"
-				android:text="Set pages"/>
-
 		</LinearLayout>
 
 	</LinearLayout>

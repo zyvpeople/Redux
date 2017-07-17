@@ -16,5 +16,4 @@ sealed class PagesAction<Page> : Action {
 	class NavigateBack<Page> : PagesAction<Page>()
 	class NavigateForward<Page> : PagesAction<Page>()
 	class CompositePageAction<Page>(val actions: List<PagesAction<Page>>) : PagesAction<Page>()
-	class SetPages<Page>(val pages: List<Tag<Page>>) : PagesAction<Page>()
 }
