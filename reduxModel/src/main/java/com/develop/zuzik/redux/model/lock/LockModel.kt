@@ -12,6 +12,7 @@ import io.reactivex.subjects.PublishSubject
 /**
  * Created by yaroslavzozulia on 7/4/17.
  */
+//TODO: add logic to save last timer time because system can terminate application but timer delay can be very long
 class LockModel(private val lockTimer: LockTimer) :
 		ReduxModel<LockState>(LockState(locked = false), AndroidSchedulers.mainThread()),
 		Lock.Model {
