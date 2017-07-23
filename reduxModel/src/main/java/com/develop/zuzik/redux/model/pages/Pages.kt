@@ -21,9 +21,8 @@ interface Pages {
 
 		val onAddPageToHead: Observable<Tag<Page>>
 		val onAddPageToTail: Observable<Tag<Page>>
-		//TODO: do not use pair
-		val onAddPageAfterPage: Observable<Pair<Tag<Page>, String>>
-		val onAddPageBeforePage: Observable<Pair<Tag<Page>, String>>
+		val onAddPageAfterPage: Observable<AddPageData<Page>>
+		val onAddPageBeforePage: Observable<AddPageData<Page>>
 		val onRemovePage: Observable<String>
 		val onNavigateToPage: Observable<String>
 		val onNavigateBack: Observable<Unit>

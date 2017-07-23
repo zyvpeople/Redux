@@ -30,11 +30,11 @@ class PagesPresenter<Page>(private val model: Pages.Model<Page>) :
 				.subscribe(model.dispatch::onNext))
 		intent(view
 				.onAddPageAfterPage
-				.map { PagesAction.AddPageAfterPage(it.first, it.second) }
+				.map { PagesAction.AddPageAfterPage(it.page, it.existedPageTag) }
 				.subscribe(model.dispatch::onNext))
 		intent(view
 				.onAddPageBeforePage
-				.map { PagesAction.AddPageBeforePage(it.first, it.second) }
+				.map { PagesAction.AddPageBeforePage(it.page, it.existedPageTag) }
 				.subscribe(model.dispatch::onNext))
 		intent(view
 				.onRemovePage

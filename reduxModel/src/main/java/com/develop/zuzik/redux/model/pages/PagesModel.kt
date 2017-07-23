@@ -10,8 +10,6 @@ import io.reactivex.subjects.PublishSubject
 /**
  * Created by yaroslavzozulia on 7/9/17.
  */
-//TODO: implement logic for next cases:
-//TODO: in case of view pager do not listen state but push separate events
 class PagesModel<Page>(pages: List<Tag<Page>>,
 					   currentPageTag: String,
 					   pageInteractionStrategy: PageInteractionStrategy<Page>) :

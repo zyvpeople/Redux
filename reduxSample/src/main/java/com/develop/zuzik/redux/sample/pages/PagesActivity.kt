@@ -5,10 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import com.develop.zuzik.redux.R
 import com.develop.zuzik.redux.core.Tag
 import com.develop.zuzik.redux.core.extension.asObserver
-import com.develop.zuzik.redux.model.pages.DoNothingPageInteractionStrategy
-import com.develop.zuzik.redux.model.pages.Pages
-import com.develop.zuzik.redux.model.pages.PagesModel
-import com.develop.zuzik.redux.model.pages.PagesPresenter
+import com.develop.zuzik.redux.model.pages.*
 import com.develop.zuzik.redux.sample.pages.welcome.WelcomePage
 import com.develop.zuzik.redux.sample.pages.welcome.WelcomePageInteractionStrategy
 import com.develop.zuzik.redux.sample.pages.welcome.WelcomePagesAdapter
@@ -58,14 +55,14 @@ class PagesActivity : AppCompatActivity() {
 					.clicks()
 					.map { etNewPage.text.toString() }
 					.map { Tag(it, WelcomePage(it, false, false)) }
-			override val onAddPageAfterPage: Observable<Pair<Tag<WelcomePage>, String>> = btnAddAfterPage
+			override val onAddPageAfterPage: Observable<AddPageData<WelcomePage>> = btnAddAfterPage
 					.clicks()
 					.map { Pair(etNewPage.text.toString(), etExistedPage.text.toString()) }
-					.map { Pair(Tag(it.first, WelcomePage(it.first, false, false)), it.second) }
-			override val onAddPageBeforePage: Observable<Pair<Tag<WelcomePage>, String>> = btnAddBeforePage
+					.map { AddPageData(Tag(it.first, WelcomePage(it.first, false, false)), it.second) }
+			override val onAddPageBeforePage: Observable<AddPageData<WelcomePage>> = btnAddBeforePage
 					.clicks()
 					.map { Pair(etNewPage.text.toString(), etExistedPage.text.toString()) }
-					.map { Pair(Tag(it.first, WelcomePage(it.first, false, false)), it.second) }
+					.map { AddPageData(Tag(it.first, WelcomePage(it.first, false, false)), it.second) }
 			override val onRemovePage: Observable<String> = btnRemovePage
 					.clicks()
 					.map { etNewPage.text.toString() }
