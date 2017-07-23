@@ -39,6 +39,8 @@
 		</activity>
 		<activity android:name=".sample.splash.NextAfterSplashActivity">
 		</activity>
+		<activity android:name=".sample.pages.PagesActivity">
+		</activity>
 	</application>
 
 </manifest>
