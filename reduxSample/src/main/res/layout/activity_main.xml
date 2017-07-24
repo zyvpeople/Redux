@@ -54,5 +54,10 @@
 			style="@style/feature_button"
 			android:text="Pages"/>
 
+		<android.support.v7.widget.AppCompatButton
+			android:id="@+id/btnApplication"
+			style="@style/feature_button"
+			android:text="Application"/>
+
 	</LinearLayout>
 </ScrollView>
