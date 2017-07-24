@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import com.develop.zuzik.redux.R
 import com.develop.zuzik.redux.model.splash.Splash
 import com.develop.zuzik.redux.model.splash.SplashAction
+import com.develop.zuzik.redux.sample.application.ApplicationActivity
 import com.develop.zuzik.redux.sample.editabledata.EditableDataActivity
 import com.develop.zuzik.redux.sample.readonlyentities.ReadOnlyEntitiesActivity
 import com.develop.zuzik.redux.sample.extension.startActivity
@@ -50,6 +51,9 @@ class MainActivity : AppCompatActivity() {
 		intent(btnPages
 				.clicks()
 				.subscribe(startActivity(PagesActivity::class.java)))
+		intent(btnApplication
+				.clicks()
+				.subscribe(startActivity(ApplicationActivity::class.java)))
 	}
 
 	override fun onDestroy() {
