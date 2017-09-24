@@ -33,7 +33,7 @@ abstract class ReduxModel<State>(
 	}
 
 	override fun init() {
-		disposable = ReduxStore(defaultState, decorate(actions), reducers)
+		disposable = ReduxStore(defaultState, decorate(actions), reducers, listOf())
 				.bind()
 				.observeOn(modelScheduler)
 				.doOnError(this::handleError)

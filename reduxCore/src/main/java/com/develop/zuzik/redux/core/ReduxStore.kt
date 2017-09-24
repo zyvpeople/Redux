@@ -1,6 +1,7 @@
 package com.develop.zuzik.redux.core
 
 import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 
 /**
  * User: zuzik
@@ -8,12 +9,21 @@ import io.reactivex.Observable
  */
 class ReduxStore<State>(private val defaultState: State,
 						private val actionObservables: List<Observable<Action>>,
-						reducers: List<Reducer<State>>) {
+						reducers: List<Reducer<State>>,
+						middlewares: List<Middleware<State>>) {
 
-	private val reducer = CompositeReducer(reducers)
+	private val middleware = CompositeMiddleware(middlewares + ReduceMiddleware(CompositeReducer(reducers)))
 
-	fun bind(): Observable<State> = Observable
-			.merge(actionObservables)
-			.scan(defaultState) { oldState, action -> reducer.reduce(oldState, action) }
-
+	fun bind(): Observable<State> =
+			Observable
+					.defer {
+						val stateSubject = BehaviorSubject.createDefault(defaultState)
+						Observable
+								.merge(actionObservables)
+								.concatMap { middleware.dispatch(stateSubject.take(1), it) }
+								.distinctUntilChanged { oldState, newState -> oldState === newState }
+								.distinctUntilChanged()
+								.doOnNext { stateSubject.onNext(it) }
+								.startWith(defaultState)
+					}
 }
