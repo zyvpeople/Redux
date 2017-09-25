@@ -25,14 +25,13 @@ abstract class ReduxModel<State>(
 	private var disposable: Disposable? = null
 
 	init {
-		middlewares += object : Middleware<State> {
-			override fun dispatch(state: Observable<State>, action: Action): Observable<State> =
-					state
-							.doOnNext {
-								(it as? ErrorAction)
-										?.error
-										?.let { handleError(it) }
-							}
+		middlewares += Middleware<State> { state, action ->
+			state
+					.doOnNext {
+						(it as? ErrorAction)
+								?.error
+								?.let { handleError(it) }
+					}
 		}
 	}
 
