@@ -5,6 +5,10 @@ import io.reactivex.observers.TestObserver
 import io.reactivex.schedulers.Schedulers
 import org.junit.Assert.fail
 import org.junit.Test
+import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.*
+import org.mockito.InOrder
+import org.mockito.Mockito
 import org.mockito.Mockito.*
 
 /**
@@ -15,188 +19,207 @@ class ReduxStoreTest {
 
 	@Test
 	fun bindSendsStateUpdatedByReducers() {
-		val state = 0
-		val actions = listOf(Observable.just(PlusOneAction(), PlusOneAction(), MinusOneAction()))
-		val reducers = listOf(PlusOneReducer(), MinusOneReducer())
-		val middlewares = listOf<Middleware<Int>>()
+		val state = ""
+		val actions = listOf(Observable.just(AddLetterAAction(), AddLetterBAction(), AddLetterCAction()))
+		val reducers = listOf(AddLetterAReducer(), AddLetterBReducer(), AddLetterCReducer())
+		val middlewares = listOf<Middleware<String>>()
 		val store = ReduxStore(state, actions, reducers, middlewares)
-		val testObserver = TestObserver<Int>()
+		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
-		testObserver.assertValues(0, 1, 2, 1)
+		testObserver.assertValues("", "A", "AB", "ABC")
 		testObserver.assertComplete()
 	}
 
 	@Test
 	fun bindCallsReducerInOrder() {
-		val firstAction = mock(Action::class.java)
-		val secondAction = mock(Action::class.java)
+		val firstAction = AddLetterAAction()
+		val secondAction = AddLetterBAction()
 
-		val firstReducer = mock(Reducer::class.java) as Reducer<Int>
-		val secondReducer = mock(Reducer::class.java) as Reducer<Int>
-		val thirdReducer = mock(Reducer::class.java) as Reducer<Int>
-
-		`when`(firstReducer.reduce(0, firstAction)).thenReturn(1)
-		`when`(secondReducer.reduce(1, firstAction)).thenReturn(2)
-		`when`(thirdReducer.reduce(2, firstAction)).thenReturn(3)
-		`when`(firstReducer.reduce(3, secondAction)).thenReturn(4)
-		`when`(secondReducer.reduce(4, secondAction)).thenReturn(5)
-		`when`(thirdReducer.reduce(5, secondAction)).thenReturn(6)
+		val firstReducer = spy(AddLetterAReducer())
+		val secondReducer = spy(AddLetterBReducer())
+		val thirdReducer = spy(AddLetterCReducer())
 
 		val inOrder = inOrder(firstReducer, secondReducer, thirdReducer)
 
-		val state = 0
-		val actions = listOf(Observable.just<Action>(firstAction, secondAction))
+		val state = ""
+		val actions = listOf(Observable.just(firstAction, secondAction))
 		val reducers = listOf(firstReducer, secondReducer, thirdReducer)
-		val middlewares = listOf<Middleware<Int>>()
+		val middlewares = listOf<Middleware<String>>()
 		val store = ReduxStore(state, actions, reducers, middlewares)
-		val testObserver = TestObserver<Int>()
+		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
-		testObserver.assertValues(0, 3, 6)
+		testObserver.assertValues("", "A", "AB")
 		testObserver.assertComplete()
 
-		inOrder.verify(firstReducer, times(1)).reduce(0, firstAction)
-		inOrder.verify(secondReducer, times(1)).reduce(1, firstAction)
-		inOrder.verify(thirdReducer, times(1)).reduce(2, firstAction)
-		inOrder.verify(firstReducer, times(1)).reduce(3, secondAction)
-		inOrder.verify(secondReducer, times(1)).reduce(4, secondAction)
-		inOrder.verify(thirdReducer, times(1)).reduce(5, secondAction)
+		inOrder.verify(firstReducer, times(1)).reduce("", firstAction)
+		inOrder.verify(secondReducer, times(1)).reduce("A", firstAction)
+		inOrder.verify(thirdReducer, times(1)).reduce("A", firstAction)
+		inOrder.verify(firstReducer, times(1)).reduce("A", secondAction)
+		inOrder.verify(secondReducer, times(1)).reduce("A", secondAction)
+		inOrder.verify(thirdReducer, times(1)).reduce("AB", secondAction)
+
+		verifyNoMoreInteractions(firstReducer)
+		verifyNoMoreInteractions(secondReducer)
+		verifyNoMoreInteractions(thirdReducer)
 	}
 
 	@Test
 	fun bindSendsErrorIfReducerCausesError() {
-		val state = 0
-		val actions = listOf(Observable.just(PlusOneAction(), ErrorAction()))
-		val reducers = listOf(PlusOneReducer(), ErrorReducer())
-		val middlewares = listOf<Middleware<Int>>()
+		val state = ""
+		val actions = listOf(Observable.just(AddLetterAAction(), ErrorAction()))
+		val reducers = listOf(AddLetterAReducer(), ErrorReducer())
+		val middlewares = listOf<Middleware<String>>()
 		val store = ReduxStore(state, actions, reducers, middlewares)
-		val testObserver = TestObserver<Int>()
+		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
-		testObserver.assertValues(0, 1)
+		testObserver.assertValues("", "A")
 		testObserver.assertError(ReducerException::class.java)
 	}
 
 	@Test
 	fun bindDoesNotSendStateIfItIsSameWithPreviousState() {
-		val state = 0
-		val actions = listOf(Observable.just(PlusOneAction(), DoNothingAction()))
-		val reducers = listOf(PlusOneReducer(), DoNothingReducer())
-		val middlewares = listOf<Middleware<Int>>()
+		val state = ""
+		val actions = listOf(Observable.just(AddLetterAAction(), DoNothingAction()))
+		val reducers = listOf(AddLetterAReducer(), DoNothingReducer())
+		val middlewares = listOf<Middleware<String>>()
 		val store = ReduxStore(state, actions, reducers, middlewares)
-		val testObserver = TestObserver<Int>()
+		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
-		testObserver.assertValues(0, 1)
+		testObserver.assertValues("", "A")
 		testObserver.assertComplete()
 	}
 
 	@Test
 	fun bindDoesNotSendStateIfItIsEqualToPreviousState() {
-		val state = 0
-		val actions = listOf(Observable.just(PlusOneAction(), CopyAction()))
-		val reducers = listOf(PlusOneReducer(), CopyReducer())
-		val middlewares = listOf<Middleware<Int>>()
+		val state = ""
+		val actions = listOf(Observable.just(AddLetterAAction(), CopyAction()))
+		val reducers = listOf(AddLetterAReducer(), CopyReducer())
+		val middlewares = listOf<Middleware<String>>()
 		val store = ReduxStore(state, actions, reducers, middlewares)
-		val testObserver = TestObserver<Int>()
+		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
-		testObserver.assertValues(0, 1)
+		testObserver.assertValues("", "A")
 		testObserver.assertComplete()
 	}
 
 	@Test
 	fun bindCallsMiddlewares() {
-		val filteredMinusOneAction = MinusOneAction()
-		val filteredSetZeroAction = SetZeroAction()
-		val state = 0
-		val actions = listOf(Observable.just(PlusOneAction(), filteredMinusOneAction, PlusOneAction(), filteredSetZeroAction))
-		val reducers = listOf(PlusOneReducer(), MinusOneReducer(), SetZeroReducer())
-		val middlewares = listOf<Middleware<Int>>(FilterActionMiddleware(filteredMinusOneAction), FilterActionMiddleware(filteredSetZeroAction))
+		val filteredAddLetterBAction = AddLetterBAction()
+		val filteredAddLetterCAction = AddLetterCAction()
+		val state = ""
+		val actions = listOf(Observable.just(AddLetterAAction(), filteredAddLetterBAction, AddLetterAAction(), filteredAddLetterCAction))
+		val reducers = listOf(AddLetterAReducer(), AddLetterBReducer(), AddLetterCReducer())
+		val middlewares = listOf<Middleware<String>>(FilterActionMiddleware(filteredAddLetterBAction), FilterActionMiddleware(filteredAddLetterCAction))
 		val store = ReduxStore(state, actions, reducers, middlewares)
-		val testObserver = TestObserver<Int>()
+		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
-		testObserver.assertValues(0, 1, 2)
+		testObserver.assertValues("", "A", "AA")
 		testObserver.assertComplete()
 	}
 
 	@Test
 	fun bindCallsMiddlewaresInOrder() {
-		fail("implement")
+		val mockAction = mock(Action::class.java)
+
+		val spyMiddlewareA = AddTextMiddleware("A")
+		val spyMiddlewareB = AddTextMiddleware("B")
+		val spyMiddlewareC = AddTextMiddleware("C")
+
+		val state = ""
+		val actions = listOf(Observable.just(mockAction))
+		val reducers = listOf<Reducer<String>>()
+		val middlewares = listOf(spyMiddlewareA, spyMiddlewareB, spyMiddlewareC)
+		val store = ReduxStore(state, actions, reducers, middlewares)
+		val testObserver = TestObserver<String>()
+
+		store.bind(Schedulers.trampoline()).subscribe(testObserver)
+
+		testObserver.assertValues("", "ABC")
+		testObserver.assertComplete()
 	}
 
 	@Test
 	fun bindSendsErrorIfMiddlewareCausesError() {
-		val state = 0
-		val actions = listOf(Observable.just(PlusOneAction(), ErrorAction()))
-		val reducers = listOf(PlusOneReducer())
-		val middlewares = listOf<Middleware<Int>>(ErrorMiddleware())
+		val state = ""
+		val actions = listOf(Observable.just(AddLetterAAction(), ErrorAction()))
+		val reducers = listOf(AddLetterAReducer())
+		val middlewares = listOf<Middleware<String>>(ErrorMiddleware())
 		val store = ReduxStore(state, actions, reducers, middlewares)
-		val testObserver = TestObserver<Int>()
+		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
-		testObserver.assertValues(0, 1)
+		testObserver.assertValues("", "A")
 		testObserver.assertError(MiddlewareException::class.java)
 	}
 
-	private class PlusOneAction : Action
-	private class MinusOneAction : Action
-	private class SetZeroAction : Action
+	private class AddLetterAAction : Action
+	private class AddLetterBAction : Action
+	private class AddLetterCAction : Action
 	private class ErrorAction : Action
 	private class CopyAction : Action
 	private class DoNothingAction : Action
 
-	private class PlusOneReducer : Reducer<Int> {
-		override fun reduce(oldState: Int, action: Action): Int =
-				(action as? PlusOneAction)?.let { oldState + 1 } ?: oldState
+	private open class AddLetterAReducer : Reducer<String> {
+		override fun reduce(oldState: String, action: Action): String =
+				(action as? AddLetterAAction)?.let { oldState + "A" } ?: oldState
 	}
 
-	private class MinusOneReducer : Reducer<Int> {
-		override fun reduce(oldState: Int, action: Action): Int =
-				(action as? MinusOneAction)?.let { oldState - 1 } ?: oldState
+	private open class AddLetterBReducer : Reducer<String> {
+		override fun reduce(oldState: String, action: Action): String =
+				(action as? AddLetterBAction)?.let { oldState + "B" } ?: oldState
 	}
 
-	private class SetZeroReducer : Reducer<Int> {
-		override fun reduce(oldState: Int, action: Action): Int =
-				(action as? SetZeroAction)?.let { 0 } ?: oldState
+	private open class AddLetterCReducer : Reducer<String> {
+		override fun reduce(oldState: String, action: Action): String =
+				(action as? AddLetterCAction)?.let { oldState + "C" } ?: oldState
 	}
 
-	private class ErrorReducer : Reducer<Int> {
-		override fun reduce(oldState: Int, action: Action): Int =
+	private class ErrorReducer : Reducer<String> {
+		override fun reduce(oldState: String, action: Action): String =
 				(action as? ErrorAction)?.let { throw ReducerException() } ?: oldState
 	}
 
-	private class CopyReducer : Reducer<Int> {
-		override fun reduce(oldState: Int, action: Action): Int =
-				(action as? CopyAction)?.let { oldState + 0 } ?: oldState
+	private class CopyReducer : Reducer<String> {
+		override fun reduce(oldState: String, action: Action): String =
+				(action as? CopyAction)?.let { oldState + "" } ?: oldState
 	}
 
-	private class DoNothingReducer : Reducer<Int> {
-		override fun reduce(oldState: Int, action: Action): Int =
+	private class DoNothingReducer : Reducer<String> {
+		override fun reduce(oldState: String, action: Action): String =
 				(action as? DoNothingAction)?.let { oldState } ?: oldState
 	}
 
 	private class ReducerException : Exception()
 	private class MiddlewareException : Exception()
 
-	private class FilterActionMiddleware(private val filteredAction: Action) : Middleware<Int> {
+	private class FilterActionMiddleware(private val filteredAction: Action) : Middleware<String> {
 
-		override fun dispatch(state: Observable<Int>, action: Action): Observable<Int> =
+		override fun dispatch(state: Observable<String>, action: Action): Observable<String> =
 				state.filter { action !== filteredAction }
 	}
 
-	private class ErrorMiddleware : Middleware<Int> {
+	private class ErrorMiddleware : Middleware<String> {
 
-		override fun dispatch(state: Observable<Int>, action: Action): Observable<Int> =
+		override fun dispatch(state: Observable<String>, action: Action): Observable<String> =
 				state.map { if (action is ErrorAction) throw MiddlewareException() else it }
+	}
+
+	private open class AddTextMiddleware(private val text: String) : Middleware<String> {
+
+		override fun dispatch(state: Observable<String>, action: Action): Observable<String> =
+				state.map { it + text }
 	}
 }
