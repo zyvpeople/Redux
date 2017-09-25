@@ -20,22 +20,25 @@ abstract class ReduxModel<State>(
 
 	private var actions: List<Observable<Action>> = listOf()
 	private var reducers: List<Reducer<State>> = listOf()
-	private val compositeInterceptor = CompositeActionInterceptor()
+	private var middlewares: List<Middleware<State>> = listOf()
 
 	private var disposable: Disposable? = null
 
 	init {
-		compositeInterceptor.addInterceptor {
-			(it as? ErrorAction)
-					?.error
-					?.let(this::handleError)
+		middlewares += object : Middleware<State> {
+			override fun dispatch(state: Observable<State>, action: Action): Observable<State> =
+					state
+							.doOnNext {
+								(it as? ErrorAction)
+										?.error
+										?.let { handleError(it) }
+							}
 		}
 	}
 
 	override fun init() {
-		disposable = ReduxStore(defaultState, decorate(actions), reducers, listOf())
-				.bind()
-				.observeOn(modelScheduler)
+		disposable = ReduxStore(defaultState, actions, reducers, middlewares)
+				.bind(modelScheduler)
 				.doOnError(this::handleError)
 				.retry()
 				.subscribe { state.onNext(it) }
@@ -64,19 +67,9 @@ abstract class ReduxModel<State>(
 		reducers += reducer
 	}
 
-	protected fun addInterceptor(interceptor: Function1<Action, Unit>) {
-		compositeInterceptor.addInterceptor(interceptor)
+	protected fun addMiddleware(middleware: Middleware<State>) {
+		middlewares += middleware
 	}
-
-	private fun decorate(actions: List<Observable<Action>>): List<Observable<Action>> =
-			actions
-					.map {
-						it
-								.observeOn(modelScheduler)
-								.doOnNext {
-									compositeInterceptor.invoke(it)
-								}
-					}
 
 	private fun handleError(error: Throwable) {
 		Log.d(javaClass.simpleName, error.toString())

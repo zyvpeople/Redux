@@ -1,6 +1,7 @@
 package com.develop.zuzik.redux.core
 
 import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.subjects.BehaviorSubject
 
 /**
@@ -14,15 +15,17 @@ class ReduxStore<State>(private val defaultState: State,
 
 	private val middleware = CompositeMiddleware(middlewares + ReduceMiddleware(CompositeReducer(reducers)))
 
-	fun bind(): Observable<State> =
+	fun bind(scheduler: Scheduler): Observable<State> =
 			Observable
 					.defer {
 						val stateSubject = BehaviorSubject.createDefault(defaultState)
 						Observable
 								.merge(actionObservables)
+								.observeOn(scheduler)
 								.concatMap { middleware.dispatch(stateSubject.take(1), it) }
 								.distinctUntilChanged { oldState, newState -> oldState === newState }
 								.distinctUntilChanged()
+								.observeOn(scheduler)
 								.doOnNext { stateSubject.onNext(it) }
 								.startWith(defaultState)
 					}

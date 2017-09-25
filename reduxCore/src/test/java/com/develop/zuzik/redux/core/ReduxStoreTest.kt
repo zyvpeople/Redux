@@ -2,6 +2,7 @@ package com.develop.zuzik.redux.core
 
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
+import io.reactivex.schedulers.Schedulers
 import org.junit.Assert.fail
 import org.junit.Test
 import org.mockito.Mockito.*
@@ -21,7 +22,7 @@ class ReduxStoreTest {
 		val store = ReduxStore(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<Int>()
 
-		store.bind().subscribe(testObserver)
+		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
 		testObserver.assertValues(0, 1, 2, 1)
 		testObserver.assertComplete()
@@ -52,7 +53,7 @@ class ReduxStoreTest {
 		val store = ReduxStore(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<Int>()
 
-		store.bind().subscribe(testObserver)
+		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
 		testObserver.assertValues(0, 3, 6)
 		testObserver.assertComplete()
@@ -74,7 +75,7 @@ class ReduxStoreTest {
 		val store = ReduxStore(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<Int>()
 
-		store.bind().subscribe(testObserver)
+		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
 		testObserver.assertValues(0, 1)
 		testObserver.assertError(ReducerException::class.java)
@@ -89,7 +90,7 @@ class ReduxStoreTest {
 		val store = ReduxStore(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<Int>()
 
-		store.bind().subscribe(testObserver)
+		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
 		testObserver.assertValues(0, 1)
 		testObserver.assertComplete()
@@ -104,7 +105,7 @@ class ReduxStoreTest {
 		val store = ReduxStore(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<Int>()
 
-		store.bind().subscribe(testObserver)
+		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
 		testObserver.assertValues(0, 1)
 		testObserver.assertComplete()
@@ -121,7 +122,7 @@ class ReduxStoreTest {
 		val store = ReduxStore(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<Int>()
 
-		store.bind().subscribe(testObserver)
+		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
 		testObserver.assertValues(0, 1, 2)
 		testObserver.assertComplete()
@@ -141,7 +142,7 @@ class ReduxStoreTest {
 		val store = ReduxStore(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<Int>()
 
-		store.bind().subscribe(testObserver)
+		store.bind(Schedulers.trampoline()).subscribe(testObserver)
 
 		testObserver.assertValues(0, 1)
 		testObserver.assertError(MiddlewareException::class.java)

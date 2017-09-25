@@ -1,5 +1,7 @@
 package com.develop.zuzik.redux.model.operation
 
+import com.develop.zuzik.redux.core.Action
+import com.develop.zuzik.redux.core.Middleware
 import com.develop.zuzik.redux.core.ReduxModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -37,18 +39,18 @@ class OperationModel<Input, Output, Progress>(private val operationCommand: Oper
 								resetUserAction)
 						.switchMap(this::handleUserAction))
 		addReducer(OperationReducer())
-		addInterceptor {
-			val action = it as? OperationAction.SetSuccess<Input, Output, Progress>
-			action?.let { success.onNext(it.output) }
-		}
-		addInterceptor {
-			val action = it as? OperationAction.SetFail<Input, Output, Progress>
-			action?.let { fail.onNext(it.input to it.error) }
-		}
-		addInterceptor {
-			val action = it as? OperationAction.Cancel<Input, Output, Progress>
-			action?.let { canceled.onNext(it.input) }
-		}
+		addMiddleware(object: Middleware<OperationState<Input, Output, Progress>> {
+			override fun dispatch(state: Observable<OperationState<Input, Output, Progress>>, action: Action): Observable<OperationState<Input, Output, Progress>> =
+					state.doOnNext { (action as? OperationAction.SetSuccess<Input, Output, Progress>)?.let { success.onNext(it.output) } }
+		})
+		addMiddleware(object: Middleware<OperationState<Input, Output, Progress>> {
+			override fun dispatch(state: Observable<OperationState<Input, Output, Progress>>, action: Action): Observable<OperationState<Input, Output, Progress>> =
+					state.doOnNext { (action as? OperationAction.SetFail<Input, Output, Progress>)?.let { fail.onNext(it.input to it.error) } }
+		})
+		addMiddleware(object: Middleware<OperationState<Input, Output, Progress>> {
+			override fun dispatch(state: Observable<OperationState<Input, Output, Progress>>, action: Action): Observable<OperationState<Input, Output, Progress>> =
+					state.doOnNext { (action as? OperationAction.Cancel<Input, Output, Progress>)?.let { canceled.onNext(it.input) } }
+		})
 	}
 
 	private fun resetToUserAction(state: OperationState<Input, Output, Progress>): UserAction<Input> =
