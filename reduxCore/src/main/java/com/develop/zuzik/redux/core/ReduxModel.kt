@@ -28,7 +28,7 @@ abstract class ReduxModel<State>(
 		middlewares += Middleware<State> { state, action ->
 			state
 					.doOnNext {
-						(it as? ErrorAction)
+						(action as? ErrorAction)
 								?.error
 								?.let { handleError(it) }
 					}
