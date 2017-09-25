@@ -1,4 +1,4 @@
-package com.develop.zuzik.redux.core
+package com.develop.zuzik.redux.core.model
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

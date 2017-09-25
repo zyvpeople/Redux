@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.PagerAdapter
 import android.view.ViewGroup
-import com.develop.zuzik.redux.core.Tag
+import com.develop.zuzik.redux.core.model.value.Tag
 
 /**
  * Created by yaroslavzozulia on 7/9/17.

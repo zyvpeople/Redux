@@ -1,8 +1,8 @@
 package com.develop.zuzik.redux.model.pages
 
-import com.develop.zuzik.redux.core.ReduxModel
-import com.develop.zuzik.redux.core.Tag
-import com.develop.zuzik.redux.core.Version
+import com.develop.zuzik.redux.core.model.ReduxModel
+import com.develop.zuzik.redux.core.model.value.Tag
+import com.develop.zuzik.redux.core.model.value.Version
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject

@@ -1,4 +1,4 @@
-package com.develop.zuzik.redux.core
+package com.develop.zuzik.redux.core.model.value
 
 /**
  * Created by yaroslavzozulia on 6/20/17.

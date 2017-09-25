@@ -1,7 +1,6 @@
 package com.develop.zuzik.redux.model.lock
 
-import android.util.Log
-import com.develop.zuzik.redux.core.ReduxModel
+import com.develop.zuzik.redux.core.model.ReduxModel
 import com.develop.zuzik.redux.model.lock.lock_timer.LockTimer
 import com.develop.zuzik.redux.model.lock.lock_timer.never.NeverLockTimer
 import io.reactivex.Observable

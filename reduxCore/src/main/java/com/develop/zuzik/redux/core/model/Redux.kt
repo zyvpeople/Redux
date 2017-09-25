@@ -1,5 +1,6 @@
-package com.develop.zuzik.redux.core
+package com.develop.zuzik.redux.core.model
 
+import com.develop.zuzik.redux.core.model.value.Version
 import io.reactivex.Observable
 
 /**

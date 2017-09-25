@@ -1,7 +1,7 @@
 package com.develop.zuzik.redux.model.application
 
-import com.develop.zuzik.redux.core.Action
-import com.develop.zuzik.redux.core.Reducer
+import com.develop.zuzik.redux.core.store.Action
+import com.develop.zuzik.redux.core.store.Reducer
 
 /**
  * Created by yaroslavzozulia on 7/24/17.

@@ -1,6 +1,6 @@
 package com.develop.zuzik.redux.model.readonlyentities
 
-import com.develop.zuzik.redux.core.Version
+import com.develop.zuzik.redux.core.model.value.Version
 
 /**
  * User: zuzik

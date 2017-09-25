@@ -1,6 +1,6 @@
 package com.develop.zuzik.redux.model.splash
 
-import com.develop.zuzik.redux.core.Redux
+import com.develop.zuzik.redux.core.model.Redux
 import io.reactivex.Observer
 
 /**

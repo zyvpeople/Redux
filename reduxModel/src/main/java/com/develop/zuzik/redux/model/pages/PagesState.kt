@@ -1,7 +1,7 @@
 package com.develop.zuzik.redux.model.pages
 
-import com.develop.zuzik.redux.core.Tag
-import com.develop.zuzik.redux.core.Version
+import com.develop.zuzik.redux.core.model.value.Tag
+import com.develop.zuzik.redux.core.model.value.Version
 
 /**
  * Created by yaroslavzozulia on 7/9/17.

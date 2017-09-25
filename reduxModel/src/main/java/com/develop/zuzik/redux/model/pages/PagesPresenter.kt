@@ -1,6 +1,6 @@
 package com.develop.zuzik.redux.model.pages
 
-import com.develop.zuzik.redux.core.ReduxPresenter
+import com.develop.zuzik.redux.core.model.ReduxPresenter
 
 /**
  * Created by yaroslavzozulia on 7/9/17.
