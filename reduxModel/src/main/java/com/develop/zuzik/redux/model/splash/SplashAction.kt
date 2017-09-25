@@ -1,6 +1,6 @@
 package com.develop.zuzik.redux.model.splash
 
-import com.develop.zuzik.redux.core.Action
+import com.develop.zuzik.redux.core.store.Action
 
 /**
  * Created by yaroslavzozulia on 7/9/17.

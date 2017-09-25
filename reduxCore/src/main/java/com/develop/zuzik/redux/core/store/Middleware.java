@@ -1,4 +1,6 @@
-package com.develop.zuzik.redux.core;
+package com.develop.zuzik.redux.core.store;
+
+import com.develop.zuzik.redux.core.store.Action;
 
 import io.reactivex.Observable;
 

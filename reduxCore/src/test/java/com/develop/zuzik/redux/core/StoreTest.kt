@@ -1,21 +1,20 @@
 package com.develop.zuzik.redux.core
 
+import com.develop.zuzik.redux.core.store.Action
+import com.develop.zuzik.redux.core.store.Middleware
+import com.develop.zuzik.redux.core.store.Reducer
+import com.develop.zuzik.redux.core.store.Store
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import io.reactivex.schedulers.Schedulers
-import org.junit.Assert.fail
 import org.junit.Test
-import org.mockito.ArgumentMatchers
-import org.mockito.ArgumentMatchers.*
-import org.mockito.InOrder
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 
 /**
  * Created by yaroslavzozulia on 9/24/17.
  */
 //TODO: reducer should register action class and forget about instanceof
-class ReduxStoreTest {
+class StoreTest {
 
 	@Test
 	fun bindSendsStateUpdatedByReducers() {
@@ -23,7 +22,7 @@ class ReduxStoreTest {
 		val actions = listOf(Observable.just(AddLetterAAction(), AddLetterBAction(), AddLetterCAction()))
 		val reducers = listOf(AddLetterAReducer(), AddLetterBReducer(), AddLetterCReducer())
 		val middlewares = listOf<Middleware<String>>()
-		val store = ReduxStore(state, actions, reducers, middlewares)
+		val store = Store(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
@@ -47,7 +46,7 @@ class ReduxStoreTest {
 		val actions = listOf(Observable.just(firstAction, secondAction))
 		val reducers = listOf(firstReducer, secondReducer, thirdReducer)
 		val middlewares = listOf<Middleware<String>>()
-		val store = ReduxStore(state, actions, reducers, middlewares)
+		val store = Store(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
@@ -73,7 +72,7 @@ class ReduxStoreTest {
 		val actions = listOf(Observable.just(AddLetterAAction(), ErrorAction()))
 		val reducers = listOf(AddLetterAReducer(), ErrorReducer())
 		val middlewares = listOf<Middleware<String>>()
-		val store = ReduxStore(state, actions, reducers, middlewares)
+		val store = Store(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
@@ -88,7 +87,7 @@ class ReduxStoreTest {
 		val actions = listOf(Observable.just(AddLetterAAction(), DoNothingAction()))
 		val reducers = listOf(AddLetterAReducer(), DoNothingReducer())
 		val middlewares = listOf<Middleware<String>>()
-		val store = ReduxStore(state, actions, reducers, middlewares)
+		val store = Store(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
@@ -103,7 +102,7 @@ class ReduxStoreTest {
 		val actions = listOf(Observable.just(AddLetterAAction(), CopyAction()))
 		val reducers = listOf(AddLetterAReducer(), CopyReducer())
 		val middlewares = listOf<Middleware<String>>()
-		val store = ReduxStore(state, actions, reducers, middlewares)
+		val store = Store(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
@@ -120,7 +119,7 @@ class ReduxStoreTest {
 		val actions = listOf(Observable.just(AddLetterAAction(), filteredAddLetterBAction, AddLetterAAction(), filteredAddLetterCAction))
 		val reducers = listOf(AddLetterAReducer(), AddLetterBReducer(), AddLetterCReducer())
 		val middlewares = listOf<Middleware<String>>(FilterActionMiddleware(filteredAddLetterBAction), FilterActionMiddleware(filteredAddLetterCAction))
-		val store = ReduxStore(state, actions, reducers, middlewares)
+		val store = Store(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
@@ -141,7 +140,7 @@ class ReduxStoreTest {
 		val actions = listOf(Observable.just(mockAction))
 		val reducers = listOf<Reducer<String>>()
 		val middlewares = listOf(spyMiddlewareA, spyMiddlewareB, spyMiddlewareC)
-		val store = ReduxStore(state, actions, reducers, middlewares)
+		val store = Store(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)
@@ -156,7 +155,7 @@ class ReduxStoreTest {
 		val actions = listOf(Observable.just(AddLetterAAction(), ErrorAction()))
 		val reducers = listOf(AddLetterAReducer())
 		val middlewares = listOf<Middleware<String>>(ErrorMiddleware())
-		val store = ReduxStore(state, actions, reducers, middlewares)
+		val store = Store(state, actions, reducers, middlewares)
 		val testObserver = TestObserver<String>()
 
 		store.bind(Schedulers.trampoline()).subscribe(testObserver)

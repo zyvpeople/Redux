@@ -1,5 +1,8 @@
-package com.develop.zuzik.redux.core
+package com.develop.zuzik.redux.core.store
 
+import com.develop.zuzik.redux.core.store.reducer.CompositeReducer
+import com.develop.zuzik.redux.core.store.middleware.CompositeMiddleware
+import com.develop.zuzik.redux.core.store.middleware.ReduceMiddleware
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.subjects.BehaviorSubject
@@ -8,10 +11,10 @@ import io.reactivex.subjects.BehaviorSubject
  * User: zuzik
  * Date: 4/15/17
  */
-class ReduxStore<State>(private val defaultState: State,
-						private val actionObservables: List<Observable<Action>>,
-						reducers: List<Reducer<State>>,
-						middlewares: List<Middleware<State>>) {
+class Store<State>(private val defaultState: State,
+				   private val actionObservables: List<Observable<Action>>,
+				   reducers: List<Reducer<State>>,
+				   middlewares: List<Middleware<State>>) {
 
 	private val middleware = CompositeMiddleware(middlewares + ReduceMiddleware(CompositeReducer(reducers)))
 

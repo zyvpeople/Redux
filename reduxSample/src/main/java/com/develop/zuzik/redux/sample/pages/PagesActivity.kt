@@ -3,7 +3,7 @@ package com.develop.zuzik.redux.sample.pages
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.develop.zuzik.redux.R
-import com.develop.zuzik.redux.core.Tag
+import com.develop.zuzik.redux.core.model.value.Tag
 import com.develop.zuzik.redux.core.extension.asObserver
 import com.develop.zuzik.redux.model.pages.*
 import com.develop.zuzik.redux.sample.pages.welcome.WelcomePage

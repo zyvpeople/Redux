@@ -1,6 +1,6 @@
 package com.develop.zuzik.redux.model.application
 
-import com.develop.zuzik.redux.core.Redux
+import com.develop.zuzik.redux.core.model.Redux
 
 /**
  * Created by yaroslavzozulia on 7/24/17.

@@ -1,6 +1,6 @@
 package com.develop.zuzik.redux.model.permissions
 
-import com.develop.zuzik.redux.core.Action
+import com.develop.zuzik.redux.core.store.Action
 
 /**
  * User: zuzik

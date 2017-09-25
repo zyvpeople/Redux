@@ -1,6 +1,6 @@
 package com.develop.zuzik.redux.model.permissions
 
-import com.develop.zuzik.redux.core.Redux
+import com.develop.zuzik.redux.core.model.Redux
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.Observer

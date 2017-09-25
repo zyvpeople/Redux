@@ -1,6 +1,11 @@
-package com.develop.zuzik.redux.core
+package com.develop.zuzik.redux.core.model
 
 import android.util.Log
+import com.develop.zuzik.redux.core.store.Action
+import com.develop.zuzik.redux.core.store.Middleware
+import com.develop.zuzik.redux.core.store.Reducer
+import com.develop.zuzik.redux.core.store.Store
+import com.develop.zuzik.redux.core.model.value.Version
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
@@ -36,7 +41,7 @@ abstract class ReduxModel<State>(
 	}
 
 	override fun init() {
-		disposable = ReduxStore(defaultState, actions, reducers, middlewares)
+		disposable = Store(defaultState, actions, reducers, middlewares)
 				.bind(modelScheduler)
 				.doOnError(this::handleError)
 				.retry()

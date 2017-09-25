@@ -1,4 +1,4 @@
-package com.develop.zuzik.redux.core
+package com.develop.zuzik.redux.core.store
 
 /**
  * User: zuzik

@@ -1,8 +1,8 @@
 package com.develop.zuzik.redux.model.operation
 
-import com.develop.zuzik.redux.core.Action
-import com.develop.zuzik.redux.core.Middleware
-import com.develop.zuzik.redux.core.ReduxModel
+import com.develop.zuzik.redux.core.store.Action
+import com.develop.zuzik.redux.core.store.Middleware
+import com.develop.zuzik.redux.core.model.ReduxModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction

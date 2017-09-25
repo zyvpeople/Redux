@@ -1,6 +1,6 @@
 package com.develop.zuzik.redux.model.splash
 
-import com.develop.zuzik.redux.core.ReduxModel
+import com.develop.zuzik.redux.core.model.ReduxModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit

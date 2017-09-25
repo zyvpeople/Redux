@@ -1,6 +1,6 @@
 package com.develop.zuzik.redux.model.permissions
 
-import com.develop.zuzik.redux.core.ReduxPresenter
+import com.develop.zuzik.redux.core.model.ReduxPresenter
 import com.develop.zuzik.redux.core.extension.asConsumer
 
 /**

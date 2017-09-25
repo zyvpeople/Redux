@@ -1,7 +1,7 @@
 package com.develop.zuzik.redux.model.pages
 
-import com.develop.zuzik.redux.core.Redux
-import com.develop.zuzik.redux.core.Tag
+import com.develop.zuzik.redux.core.model.Redux
+import com.develop.zuzik.redux.core.model.value.Tag
 import io.reactivex.Observable
 import io.reactivex.Observer
 
