@@ -1,4 +1,4 @@
-package com.develop.zuzik.redux.core.model.value
+package com.develop.zuzik.redux.model.pages
 
 /**
  * Created by yaroslavzozulia on 7/15/17.
