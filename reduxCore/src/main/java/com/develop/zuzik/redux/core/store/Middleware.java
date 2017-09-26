@@ -1,6 +1,6 @@
 package com.develop.zuzik.redux.core.store;
 
-import com.develop.zuzik.redux.core.store.Action;
+import org.jetbrains.annotations.NotNull;
 
 import io.reactivex.Observable;
 
@@ -9,5 +9,6 @@ import io.reactivex.Observable;
  */
 
 public interface Middleware<State> {
-	Observable<State> dispatch(Observable<State> state, Action action);
+	@NotNull
+	Observable<State> dispatch(@NotNull Observable<State> state, @NotNull Action action);
 }
