@@ -42,7 +42,7 @@ class LogActionMiddleware : Middleware<String> {
 
 ```kotlin
 val store = Store(
-    state, 
+    defaultState, 
     listOf(Observable.just<Action>(AddSymbolAction())), 
     listOf(AddSymbolReducer()), 
     listOf(LogActionMiddleware()))
