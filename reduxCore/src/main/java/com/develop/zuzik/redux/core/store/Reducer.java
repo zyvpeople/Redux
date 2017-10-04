@@ -8,5 +8,5 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Reducer<State> {
 	@NotNull
-	State reduce(@NotNull State oldState, @NotNull Action action);
+	State reduce(@NotNull State state, @NotNull Action action);
 }
